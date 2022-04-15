@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
     <title>pyBook</title>
 </head>
 <body>
-    <div class="navbar">
-        <div id="logo">pyBook</div>
-        <div id="signup"><a href="/signup">SignUp</a></div>
-        <div id="signin"><a href="/signin">SignIn</a></div>
-        <div id="signout"><a href="/signout">SignOut</a></div>
-        <div id="myinfo"><a href="/myinfo">MyInfo</a></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-2" id="logo">pyBook</div>
+            <div class="col-6"></div>
+            <div class="col-1" id="signup"><a href="/signup">SignUp</a></div>
+            <div class="col-1" id="signin"><a href="/signin">SignIn</a></div>
+            <div class="col-1" id="signout"><a href="/signout">SignOut</a></div>
+            <div class="col-1" id="myinfo"><a href="/myinfo">MyInfo</a></div>
+        </div>
     </div>
-    <div class="contents">
-        contents
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col">contents</div>
+        </div>
     </div>
 </body>
-<script>
-    let myInfo = document.querySelector('#myinfo');
-    //myInfo.style.display = "none";
-</script>
 </html>
