@@ -20,19 +20,23 @@ def register():
 
     hashedPW = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
 
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect('pyBook.db')
+    cursor = conn.cursor()
 
-    with conn:
-        with conn.cursor() as cursor:
-            SQL = 'INSERT INTO users (username, email, passwd) VALUES (?, ?, ?)'
-            cursor.execute(SQL, (username, email, hashedPW))
-            conn.commit()
+    if cursor:
+        SQL = 'INSERT INTO users (username, email, passwd) VALUES (?, ?, ?)'
+        cursor.execute(SQL, (username, email, hashedPW))
+        conn.commit()
 
-            SQL = 'SELECT * FROM users'
-            cursor.execute(SQL)
-            rows = cursor.fetchall()
-            for row in rows:
-                print(row)
+        SQL = 'SELECT * FROM users'
+        cursor.execute(SQL)
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row)
+
+        cursor.close()
+
+    conn.close()
 
     payload = {"success": True}
     return make_response(jsonify(payload), 200)
