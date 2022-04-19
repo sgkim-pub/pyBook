@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>SignUp</title>
+</head>
+<body>
+    <div>
+        <form>
+            <label>이름
+                <input type="text" id="username">
+            </label>
+            <label>이메일
+                <input type="text" id="email">
+            </label>
+            <label>패스워드
+                <input type="password" id="passwd">
+            </label>
+            <label>패스워드 확인
+                <input type="password" id="confirm_passwd">
+            </label>
+            <button type="button" id="submit_button">제출</button>
+            <button type="button" id="cancel_button">취소</button>
+        </form>
+    </div>
+</body>
+<script>
+    let username = document.querySelector('#username');
+    let email = document.querySelector('#email');
+    let passwd = document.querySelector('#passwd');
+    let confirmPasswd = document.querySelector('#confirm_passwd');
+
+    function checkPw() {
+        return (passwd.value.length >= 5) && (passwd.value === confirmPasswd.value);
+    }
+
+    function onSubmitHandler() {
+        let pwValid = checkPw();
+
+        if(pwValid){
+            let formData = new FormData();
+
+            formData.set("username", username.value);
+            formData.set("email", email.value);
+            formData.set("passwd", passwd.value);
+
+            fetch('/api/user/signup', {
+                method: 'POST',
+                body: formData
+            }).then((response) => {
+                let url = '/home';
+                window.location.replace(url);
+            }).catch((error) => {
+                console.log('[Error]signup:', error);
+            });
+        }
+    }
+
+    let submitButton = document.querySelector('#submit_button');
+    submitButton.addEventListener('click', onSubmitHandler);
+
+    function onCancelHandler() {
+        let url = '/home';
+        window.location.replace(url);
+    }
+
+    let cancelButton = document.querySelector('#cancel_button');
+    cancelButton.addEventListener('click', onCancelHandler);
+</script>
+</html>
