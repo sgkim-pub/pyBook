@@ -1,33 +1,65 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
     <title>SignUp</title>
 </head>
 <body>
-    <div>
-        <form>
-            <label>이름
-                <input type="text" id="username">
-            </label>
-            <label>이메일
-                <input type="text" id="email">
-            </label>
-            <label>패스워드
-                <input type="password" id="passwd">
-            </label>
-            <label>패스워드 확인
-                <input type="password" id="confirm_passwd">
-            </label>
-            <button type="button" id="submit_button">제출</button>
-            <button type="button" id="cancel_button">취소</button>
-        </form>
+    <div class="container">
+        <div class="row navbar bg-light align-items-center mb-5">
+            <div class="col-6">
+                <a class="nav-link" href="/home"><h4>pyBook</h4></a>
+            </div>
+            <div class="col-6">
+                <ul class="nav justify-content-end">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/signup">SignUp</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">SignIn</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">SignOut</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">MyInfo</a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <form>
+                    <div class="mb-3">
+                        <label for="username_input" class="form-label">이름</label>
+                        <input type="text" class="form-control" id="username_input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email_input" class="form-label">이메일</label>
+                        <input type="text" class="form-control" id="email_input">
+                    </div>
+                    <div class="mb-3">
+                    <label for="password_input" class="form-label">패스워드</label>
+                        <input type="password" class="form-control" id="password_input">
+                    </div>
+                    <div class="mb-3">
+                    <label for="password_confirm" class="form-label">패스워드 확인</label>
+                        <input type="password" class="form-control" id="password_confirm">
+                    </div>
+                    <div>
+                        <button type="button" id="submit_button">제출</button>
+                        <button type="button" id="cancel_button">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </body>
 <script>
-    let username = document.querySelector('#username');
-    let email = document.querySelector('#email');
-    let passwd = document.querySelector('#passwd');
-    let confirmPasswd = document.querySelector('#confirm_passwd');
+    let username = document.querySelector('#username_input');
+    let email = document.querySelector('#email_input');
+    let passwd = document.querySelector('#password_input');
+    let confirmPasswd = document.querySelector('#password_confirm');
 
     function checkPw() {
         return (passwd.value.length >= 5) && (passwd.value === confirmPasswd.value);
