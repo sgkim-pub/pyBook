@@ -40,3 +40,7 @@ def register():
 
     payload = {"success": True}
     return make_response(jsonify(payload), 200)
+
+@user.route('/signin')
+def signIn():
+    return send_from_directory(app.root_path, 'templates/signin.html')

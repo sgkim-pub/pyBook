@@ -1,8 +1,8 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    <title>SignUp</title>
+    <title>Signin</title>
 </head>
 <body>
     <div class="container">
@@ -31,20 +31,12 @@
             <div class="col-4">
                 <form>
                     <div class="mb-3">
-                        <label for="username_input" class="form-label">이름</label>
-                        <input type="text" class="form-control" id="username_input">
-                    </div>
-                    <div class="mb-3">
                         <label for="email_input" class="form-label">이메일</label>
                         <input type="text" class="form-control" id="email_input">
                     </div>
                     <div class="mb-3">
                     <label for="password_input" class="form-label">패스워드</label>
                         <input type="password" class="form-control" id="password_input">
-                    </div>
-                    <div class="mb-4">
-                    <label for="password_confirm" class="form-label">패스워드 확인</label>
-                        <input type="password" class="form-control" id="password_confirm">
                     </div>
                 </form>
             </div>
@@ -58,46 +50,14 @@
     </div>
 </body>
 <script>
-    let username = document.querySelector('#username_input');
     let email = document.querySelector('#email_input');
     let passwd = document.querySelector('#password_input');
-    let confirmPasswd = document.querySelector('#password_confirm');
 
-    function checkPw() {
-        return (passwd.value.length >= 5) && (passwd.value === confirmPasswd.value);
-    }
+    window.onload = function() {
+        console.log('Signin.window.onload()');
+    };
 
     function onSubmitHandler() {
-        let pwValid = checkPw();
-
-        if(pwValid){
-            let formData = new FormData();
-
-            formData.set("username", username.value);
-            formData.set("email", email.value);
-            formData.set("passwd", passwd.value);
-
-            fetch('/api/user/signup', {
-                method: 'POST',
-                body: formData
-            }).then((response) => {
-                let url = '/home';
-                window.location.replace(url);
-            }).catch((error) => {
-                console.log('[Error]signup:', error);
-            });
-        }
     }
-
-    let submitButton = document.querySelector('#submit_button');
-    submitButton.addEventListener('click', onSubmitHandler);
-
-    function onCancelHandler() {
-        let url = '/home';
-        window.location.replace(url);
-    }
-
-    let cancelButton = document.querySelector('#cancel_button');
-    cancelButton.addEventListener('click', onCancelHandler);
 </script>
 </html>
