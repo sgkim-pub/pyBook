@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
     <title>Signin</title>
 </head>
 <body>
@@ -58,6 +58,21 @@
     };
 
     function onSubmitHandler() {
+
+        let formData = new FormData();
+
+        formData.set("email", email.value);
+        formData.set("passwd", passwd.value);
+
+        fetch('/api/user/signin', {
+            method: 'POST',
+            body: formData
+        }).then((response) => {
+            let url = '/home';
+            window.location.replace(url);
+        }).catch((error) => {
+            console.log('[Error]signin:', error);
+        });
     }
 </script>
 </html>

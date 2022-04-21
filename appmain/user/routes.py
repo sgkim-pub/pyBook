@@ -43,4 +43,57 @@ def register():
 
 @user.route('/signin')
 def signIn():
+
     return send_from_directory(app.root_path, 'templates/signin.html')
+
+@user.route('/api/user/signup', methods=['POST'])
+def getAuth():
+    data = request.form
+
+    email = data.get("email")
+    passwd = data.get("passwd")
+
+    conn = pymysql.connect(host='localhost', user=cfg.DB_USER, password=cfg.DB_PASSWORD,
+                           db=cfg.DB, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+
+    payload = {"authenticated": False, "email": '', "username": '', "authToken": ''}
+
+    with conn:
+        with conn.cursor() as cursor:
+            sql = 'SELECT userNo, username, pw FROM users WHERE email=%s'
+            cursor.execute(sql, email)
+            result = cursor.fetchone()
+
+    if result:
+        pwMatch = bcrypt.checkpw(password.encode('utf-8'), result["pw"].encode('utf-8'))
+        username = result["username"]
+        userNo = result["userNo"]
+    else:
+        pwMatch = None
+
+    if pwMatch:
+        authkey = secrets.token_hex(16)
+
+        conn = pymysql.connect(host='localhost', user=cfg.DB_USER, password=cfg.DB_PASSWORD,
+                               db=cfg.DB, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+
+        with conn:
+            with conn.cursor() as cursor:
+                sql = 'UPDATE users SET authkey=%s WHERE email=%s'
+                cursor.execute(sql, (authkey, email))
+                conn.commit()
+
+        token = jwt.encode({"userno": userNo, "email": email, "username": username, "authkey": authkey},
+                           app.config["SECRET_KEY"], algorithm='HS256')
+        payload = {"authenticated": True, "email": email, "username": username, "authToken": token}
+
+        print('user.signin: %s' % email)
+
+        response = make_response(jsonify(payload), 200)
+        return response
+    else:
+        pass
+
+        response = make_response(jsonify(payload), 200)
+        return response
+
