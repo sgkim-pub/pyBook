@@ -1,6 +1,8 @@
 from flask import Blueprint, send_from_directory, make_response, jsonify, request
 import sqlite3
 import bcrypt
+import secrets
+import jwt
 
 from appmain import app
 
@@ -46,54 +48,49 @@ def signIn():
 
     return send_from_directory(app.root_path, 'templates/signin.html')
 
-@user.route('/api/user/signup', methods=['POST'])
+@user.route('/api/user/signin', methods=['POST'])
 def getAuth():
     data = request.form
 
     email = data.get("email")
     passwd = data.get("passwd")
 
-    conn = pymysql.connect(host='localhost', user=cfg.DB_USER, password=cfg.DB_PASSWORD,
-                           db=cfg.DB, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+    conn = sqlite3.connect('pyBook.db')
+    cursor = conn.cursor()
 
     payload = {"authenticated": False, "email": '', "username": '', "authToken": ''}
 
-    with conn:
-        with conn.cursor() as cursor:
-            sql = 'SELECT userNo, username, pw FROM users WHERE email=%s'
-            cursor.execute(sql, email)
-            result = cursor.fetchone()
+    if cursor:
+        # SQL = 'SELECT id, username, passwd FROM users WHERE email=%s'
+        SQL = 'SELECT id, username, passwd FROM users WHERE email=?'
+        cursor.execute(SQL, email)
+        result = cursor.fetchone()
 
-    if result:
-        pwMatch = bcrypt.checkpw(password.encode('utf-8'), result["pw"].encode('utf-8'))
-        username = result["username"]
-        userNo = result["userNo"]
-    else:
-        pwMatch = None
+        if result:
+            pwMatch = bcrypt.checkpw(passwd.encode('utf-8'), result["passwd"].encode('utf-8'))
+            username = result["username"]
+            id = result["id"]
+        else:
+            pwMatch = None
 
     if pwMatch:
-        authkey = secrets.token_hex(16)
+        authtoken = secrets.token_hex(16)
 
-        conn = pymysql.connect(host='localhost', user=cfg.DB_USER, password=cfg.DB_PASSWORD,
-                               db=cfg.DB, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+        # SQL = 'UPDATE users SET authtoken=%s WHERE id=%s'
+        SQL = 'UPDATE users SET authtoken=? WHERE id=?'
+        cursor.execute(SQL, (authtoken, id))
+        conn.commit()
 
-        with conn:
-            with conn.cursor() as cursor:
-                sql = 'UPDATE users SET authkey=%s WHERE email=%s'
-                cursor.execute(sql, (authkey, email))
-                conn.commit()
+        cursor.close()
+        conn.close()
 
-        token = jwt.encode({"userno": userNo, "email": email, "username": username, "authkey": authkey},
+        token = jwt.encode({"id": id, "email": email, "username": username, "authtoken": authtoken},
                            app.config["SECRET_KEY"], algorithm='HS256')
         payload = {"authenticated": True, "email": email, "username": username, "authToken": token}
 
         print('user.signin: %s' % email)
-
-        response = make_response(jsonify(payload), 200)
-        return response
     else:
         pass
 
         response = make_response(jsonify(payload), 200)
         return response
-
