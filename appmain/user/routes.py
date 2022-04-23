@@ -58,7 +58,7 @@ def getAuth():
     conn = sqlite3.connect('pyBook.db')
     cursor = conn.cursor()
 
-    payload = {"authenticated": False, "email": '', "username": '', "authToken": ''}
+    payload = {"authenticated": False, "email": '', "username": '', "auth": ''}
 
     if cursor:
         # SQL = 'SELECT id, username, passwd FROM users WHERE email=%s'
@@ -86,7 +86,7 @@ def getAuth():
 
         token = jwt.encode({"id": id, "email": email, "username": username, "authtoken": authtoken},
                            app.config["SECRET_KEY"], algorithm='HS256')
-        payload = {"authenticated": True, "email": email, "username": username, "authToken": token}
+        payload = {"authenticated": True, "email": email, "username": username, "auth": token}
 
         print('user.signin: %s' % email)
     else:

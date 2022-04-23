@@ -34,4 +34,10 @@
         </div>
     </div>
 </body>
+<script>
+    window.onload = function() {
+        auth = window.sessionStorage.getItem("auth");
+        console.log('Signin.window.onload().auth:%s', auth);
+    };
+</script>
 </html>

@@ -68,6 +68,11 @@
             method: 'POST',
             body: formData
         }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            console.log('Signin.auth:%s', authtoken);
+            window.sessionStorage.setItem("authtoken", resBody["auth"]);
+
             let url = '/home';
             window.location.replace(url);
         }).catch((error) => {
