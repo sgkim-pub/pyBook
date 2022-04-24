@@ -58,39 +58,37 @@ def getAuth():
     conn = sqlite3.connect('pyBook.db')
     cursor = conn.cursor()
 
-    payload = {"authenticated": False, "email": '', "username": '', "auth": ''}
+    payload = {"authenticated": False, "email": '', "username": '', "authtoken": ''}
 
     if cursor:
-        # SQL = 'SELECT id, username, passwd FROM users WHERE email=%s'
         SQL = 'SELECT id, username, passwd FROM users WHERE email=?'
-        cursor.execute(SQL, email)
+        cursor.execute(SQL, (email,))
         result = cursor.fetchone()
 
         if result:
-            pwMatch = bcrypt.checkpw(passwd.encode('utf-8'), result["passwd"].encode('utf-8'))
-            username = result["username"]
-            id = result["id"]
+            pwMatch = bcrypt.checkpw(passwd.encode('utf-8'), result[2])
+            id = result[0]
+            username = result[1]
         else:
             pwMatch = None
 
     if pwMatch:
-        authtoken = secrets.token_hex(16)
+        authkey = secrets.token_hex(16)
 
-        # SQL = 'UPDATE users SET authtoken=%s WHERE id=%s'
-        SQL = 'UPDATE users SET authtoken=? WHERE id=?'
-        cursor.execute(SQL, (authtoken, id))
+        SQL = 'UPDATE users SET authkey=? WHERE id=?'
+        cursor.execute(SQL, (authkey, id))
         conn.commit()
 
         cursor.close()
         conn.close()
 
-        token = jwt.encode({"id": id, "email": email, "username": username, "authtoken": authtoken},
+        token = jwt.encode({"id": id, "email": email, "username": username, "authkey": authkey},
                            app.config["SECRET_KEY"], algorithm='HS256')
-        payload = {"authenticated": True, "email": email, "username": username, "auth": token}
+        payload = {"authenticated": True, "email": email, "username": username, "authtoken": token}
 
         print('user.signin: %s' % email)
     else:
         pass
 
-        response = make_response(jsonify(payload), 200)
-        return response
+    response = make_response(jsonify(payload), 200)
+    return response

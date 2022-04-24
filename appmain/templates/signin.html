@@ -70,8 +70,8 @@
         }).then((response) => {
             return response.json();
         }).then((resBody) => {
-            console.log('Signin.auth:%s', authtoken);
-            window.sessionStorage.setItem("authtoken", resBody["auth"]);
+            console.log('Signin.authtoken:%s', resBody["authtoken"]);
+            window.sessionStorage.setItem("authtoken", resBody["authtoken"]);
 
             let url = '/home';
             window.location.replace(url);
@@ -79,5 +79,16 @@
             console.log('[Error]signin:', error);
         });
     }
+
+    let submitButton = document.querySelector('#submit_button');
+    submitButton.addEventListener('click', onSubmitHandler);
+
+    function onCancelHandler() {
+        let url = '/home';
+        window.location.replace(url);
+    }
+
+    let cancelButton = document.querySelector('#cancel_button');
+    cancelButton.addEventListener('click', onCancelHandler);
 </script>
 </html>
