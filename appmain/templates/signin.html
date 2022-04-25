@@ -13,16 +13,16 @@
             <div class="col-6">
                 <ul class="nav justify-content-end">
                   <li class="nav-item">
-                    <a class="nav-link" href="/signup">SignUp</a>
+                    <a class="nav-link" id="signup_link" href="/signup">SignUp</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/signin">SignIn</a>
+                    <a class="nav-link" id="signin_link" href="/signin">SignIn</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/signout">SignOut</a>
+                    <a class="nav-link" id="signout_link" href="#">SignOut</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/myinfo">MyInfo</a>
+                    <a class="nav-link" id="myinfo_link" href="/myinfo">MyInfo</a>
                   </li>
                 </ul>
             </div>
@@ -49,13 +49,10 @@
         </div>
     </div>
 </body>
+<script type="text/javascript" src="static/js/navbar.js"></script>
 <script>
     let email = document.querySelector('#email_input');
     let passwd = document.querySelector('#password_input');
-
-    window.onload = function() {
-        console.log('Signin.window.onload()');
-    };
 
     function onSubmitHandler() {
 
@@ -70,9 +67,7 @@
         }).then((response) => {
             return response.json();
         }).then((resBody) => {
-            console.log('Signin.authtoken:%s', resBody["authtoken"]);
             window.sessionStorage.setItem("authtoken", resBody["authtoken"]);
-
             let url = '/home';
             window.location.replace(url);
         }).catch((error) => {
