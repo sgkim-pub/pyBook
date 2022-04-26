@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
     <title>My page</title>
 </head>
 <body>
@@ -57,6 +58,13 @@
     let username = document.querySelector('#username_input');
     let passwd = document.querySelector('#password_input');
     let confirmPasswd = document.querySelector('#password_confirm');
+
+    function fillUserData() {
+        let uname = sessionStorage.getItem("username");
+        username.value = uname;
+    }
+
+    window.addEventListener('load', fillUserData);
 
     function onSubmitHandler() {
     }

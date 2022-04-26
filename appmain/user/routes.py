@@ -92,3 +92,8 @@ def getAuth():
 
     response = make_response(jsonify(payload), 200)
     return response
+
+@user.route('/myinfo')
+def myPage():
+
+    return send_from_directory(app.root_path, 'templates/mypage.html')
