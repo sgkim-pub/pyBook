@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>My page</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row navbar bg-light align-items-center mb-5">
+            <div class="col-6">
+                <a class="nav-link" href="/home"><h4>pyBook</h4></a>
+            </div>
+            <div class="col-6">
+                <ul class="nav justify-content-end">
+                  <li class="nav-item">
+                    <a class="nav-link" id="signup_link" href="/signup">SignUp</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="signin_link" href="/signin">SignIn</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="signout_link" href="#">SignOut</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="myinfo_link" href="/myinfo">MyInfo</a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <form>
+                <div class="mb-3">
+                    <label for="username_input" class="form-label">이름</label>
+                    <input type="text" class="form-control" id="username_input">
+                </div>
+                <div class="mb-3">
+                <label for="password_input" class="form-label">패스워드</label>
+                    <input type="password" class="form-control" id="password_input">
+                </div>
+                <div class="mb-4">
+                <label for="password_confirm" class="form-label">패스워드 확인</label>
+                    <input type="password" class="form-control" id="password_confirm">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4 text-center">
+            <button type="button" class="btn btn-primary" id="submit_button">수정</button>
+            <button type="button" class="btn btn-secondary" id="cancel_button">취소</button>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="static/js/navbar.js"></script>
+<script>
+    let username = document.querySelector('#username_input');
+    let passwd = document.querySelector('#password_input');
+    let confirmPasswd = document.querySelector('#password_confirm');
+
+    function onSubmitHandler() {
+    }
+
+    let submitButton = document.querySelector('#submit_button');
+    submitButton.addEventListener('click', onSubmitHandler);
+
+    function onCancelHandler() {
+        history.back();
+    }
+
+    let cancelButton = document.querySelector('#cancel_button');
+    cancelButton.addEventListener('click', onCancelHandler);
+</script>
+</html>
