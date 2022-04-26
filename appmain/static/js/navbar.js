@@ -20,6 +20,7 @@ window.addEventListener("load", showAndHideNavbarMenu);
 
 function signOutHandler() {
     window.sessionStorage.removeItem("authtoken");
+    window.sessionStorage.removeItem("username");
 
     let url = '/home';
     window.location.replace(url);
