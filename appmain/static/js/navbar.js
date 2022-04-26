@@ -5,7 +5,6 @@ let myinfo = document.querySelector("#myinfo_link");
 
 function showAndHideNavbarMenu() {
     let authtoken = window.sessionStorage.getItem("authtoken");
-    console.log('index.window.onload().authtoken:%s', authtoken);
 
     if(authtoken){
         signup.style.display = "none";
