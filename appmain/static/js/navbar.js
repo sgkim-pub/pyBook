@@ -5,6 +5,7 @@ let myinfo = document.querySelector("#myinfo_link");
 
 function showAndHideNavbarMenu() {
     let authtoken = window.sessionStorage.getItem("authtoken");
+    let username = window.sessionStorage.getItem("username");
 
     if(authtoken){
         signup.style.display = "none";
@@ -20,6 +21,7 @@ window.addEventListener("load", showAndHideNavbarMenu);
 
 function signOutHandler() {
     window.sessionStorage.removeItem("authtoken");
+    window.sessionStorage.removeItem("username");
 
     let url = '/home';
     window.location.replace(url);

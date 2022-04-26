@@ -68,6 +68,7 @@
             return response.json();
         }).then((resBody) => {
             window.sessionStorage.setItem("authtoken", resBody["authtoken"]);
+            window.sessionStorage.setItem("username", resBody["username"]);
             let url = '/home';
             window.location.replace(url);
         }).catch((error) => {
