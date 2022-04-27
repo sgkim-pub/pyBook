@@ -6,6 +6,8 @@ import jwt
 
 from appmain import app
 
+from appmain.utils import verifyJWT, getJWTContent
+
 user = Blueprint('user', __name__)
 
 @user.route('/signup')
@@ -97,3 +99,55 @@ def getAuth():
 def myPage():
 
     return send_from_directory(app.root_path, 'templates/mypage.html')
+
+@user.route('/api/user/update', methods=['POST'])
+def updateMyInfo():
+
+    headerData = request.headers
+    data = request.form
+
+    authToken = headerData.get("authtoken")
+    username = data.get("username")
+    passwd = data.get("passwd")
+
+    print('updateMyInfo.authToken:', authToken)
+
+    payload = {"success": False}
+
+    if authToken:
+        isValid = verifyJWT(authToken)
+        print('updateMyInfo.isValid:', isValid)
+
+        if isValid:
+            token = getJWTContent(authToken)
+            email = token["email"]
+
+            print('updateMyInfo.email:', email)
+            print('updateMyInfo.new_username:', username)
+            print('updateMyInfo.new_passwd:', passwd)
+
+            # hashedPW = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
+
+            # conn = sqlite3.connect('pyBook.db')
+            # cursor = conn.cursor()
+            #
+            # if cursor:
+            #     if passwd:
+            #         SQL = 'UPDATE users SET username=?, passwd=? WHERE=?'
+            #         cursor.execute(SQL, (username, hashedPW, email))
+            #     else:
+            #         SQL = 'UPDATE users SET username=? WHERE=?'
+            #         cursor.execute(SQL, (username, email))
+            #     conn.commit()
+            #
+            #     SQL = 'SELECT * FROM users'
+            #     cursor.execute(SQL)
+            #     rows = cursor.fetchall()
+            #     for row in rows:
+            #         print(row)
+            #
+            #     cursor.close()
+            # conn.close()
+
+    response = make_response(jsonify(payload), 200)
+    return response

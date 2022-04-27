@@ -66,7 +66,46 @@
 
     window.addEventListener('load', fillUserData);
 
+    function checkPw() {
+        let retVal = false;
+
+        if(passwd.length == 0){
+            retVal = true;
+        }
+        else{
+            retVal = (passwd.value.length >= 5) && (passwd.value === confirmPasswd.value);
+        }
+
+        return retVal;
+    }
+
     function onSubmitHandler() {
+        let pwValid =  checkPw();
+
+        if(pwValid){
+            let headerData = new Headers();
+
+            let authToken = sessionStorage.getItem("authtoken");
+            if(authToken){
+                headerData.set("authtoken", authToken);
+            }
+
+            let formData = new FormData();
+
+            formData.set("username", username.value);
+            formData.set("passwd", passwd.value);
+
+            fetch('/api/user/update', {
+                method: 'POST',
+                headers: headerData,
+                body: formData
+            }).then((response) => {
+                let url = '/home';
+                window.location.replace(url);
+            }).catch((error) => {
+                console.log('[Error]signup:', error);
+            });
+        }
     }
 
     let submitButton = document.querySelector('#submit_button');
