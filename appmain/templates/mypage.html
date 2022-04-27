@@ -60,8 +60,23 @@
     let confirmPasswd = document.querySelector('#password_confirm');
 
     function fillUserData() {
-        let uname = sessionStorage.getItem("username");
-        username.value = uname;
+        let headerData = new Headers();
+
+        let authToken = sessionStorage.getItem("authtoken");
+        if(authToken){
+            headerData.set("authtoken", authToken);
+        }
+
+        fetch('/api/user/myinfo', {
+            method: 'POST',
+            headers: headerData,
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            username.value = resBody["username"];
+        }).catch((error) => {
+            console.log('[Error]fillUserData:', error);
+        });
     }
 
     window.addEventListener('load', fillUserData);
@@ -69,7 +84,7 @@
     function checkPw() {
         let retVal = false;
 
-        if(passwd.length == 0){
+        if(passwd.value.length == 0){
             retVal = true;
         }
         else{

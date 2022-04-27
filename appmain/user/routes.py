@@ -39,7 +39,6 @@ def register():
             print(row)
 
         cursor.close()
-
     conn.close()
 
     payload = {"success": True}
@@ -74,31 +73,61 @@ def getAuth():
         else:
             pwMatch = None
 
-    if pwMatch:
-        authkey = secrets.token_hex(16)
+        if pwMatch:
+            authkey = secrets.token_hex(16)
 
-        SQL = 'UPDATE users SET authkey=? WHERE id=?'
-        cursor.execute(SQL, (authkey, id))
-        conn.commit()
+            SQL = 'UPDATE users SET authkey=? WHERE id=?'
+            cursor.execute(SQL, (authkey, id))
+            conn.commit()
+
+            token = jwt.encode({"id": id, "email": email, "username": username, "authkey": authkey},
+                               app.config["SECRET_KEY"], algorithm='HS256')
+            payload = {"authenticated": True, "email": email, "username": username, "authtoken": token}
+
+            print('user.signin: %s' % email)
+        else:
+            pass
 
         cursor.close()
-        conn.close()
-
-        token = jwt.encode({"id": id, "email": email, "username": username, "authkey": authkey},
-                           app.config["SECRET_KEY"], algorithm='HS256')
-        payload = {"authenticated": True, "email": email, "username": username, "authtoken": token}
-
-        print('user.signin: %s' % email)
-    else:
-        pass
+    conn.close()
 
     response = make_response(jsonify(payload), 200)
     return response
 
 @user.route('/myinfo')
 def myPage():
-
     return send_from_directory(app.root_path, 'templates/mypage.html')
+
+@user.route('/api/user/myinfo', methods=['POST'])
+def getMyInfo():
+    headerData = request.headers
+
+    authToken = headerData.get("authtoken")
+
+    payload = {"success": False}
+
+    if authToken:
+        isValid = verifyJWT(authToken)
+
+        if isValid:
+            token = getJWTContent(authToken)
+            email = token["email"]
+
+            conn = sqlite3.connect('pyBook.db')
+            cursor = conn.cursor()
+
+            if cursor:
+                SQL = 'SELECT username FROM users WHERE email=?'
+                cursor.execute(SQL, (email,))
+                username = cursor.fetchone()[0]
+                cursor.close()
+            conn.close()
+
+            payload = {"success": False, "username": username}
+
+    response = make_response(jsonify(payload), 200)
+    return response
+
 
 @user.route('/api/user/update', methods=['POST'])
 def updateMyInfo():
@@ -126,28 +155,28 @@ def updateMyInfo():
             print('updateMyInfo.new_username:', username)
             print('updateMyInfo.new_passwd:', passwd)
 
-            # hashedPW = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
+            hashedPW = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
 
-            # conn = sqlite3.connect('pyBook.db')
-            # cursor = conn.cursor()
-            #
-            # if cursor:
-            #     if passwd:
-            #         SQL = 'UPDATE users SET username=?, passwd=? WHERE=?'
-            #         cursor.execute(SQL, (username, hashedPW, email))
-            #     else:
-            #         SQL = 'UPDATE users SET username=? WHERE=?'
-            #         cursor.execute(SQL, (username, email))
-            #     conn.commit()
-            #
-            #     SQL = 'SELECT * FROM users'
-            #     cursor.execute(SQL)
-            #     rows = cursor.fetchall()
-            #     for row in rows:
-            #         print(row)
-            #
-            #     cursor.close()
-            # conn.close()
+            conn = sqlite3.connect('pyBook.db')
+            cursor = conn.cursor()
+
+            if cursor:
+                if passwd:
+                    SQL = 'UPDATE users SET username=?, passwd=? WHERE email=?'
+                    cursor.execute(SQL, (username, hashedPW, email))
+                else:
+                    SQL = 'UPDATE users SET username=? WHERE email=?'
+                    cursor.execute(SQL, (username, email))
+                conn.commit()
+
+                SQL = 'SELECT * FROM users'
+                cursor.execute(SQL)
+                rows = cursor.fetchall()
+                for row in rows:
+                    print(row)
+
+                cursor.close()
+            conn.close()
 
     response = make_response(jsonify(payload), 200)
     return response

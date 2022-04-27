@@ -10,23 +10,16 @@ def verifyJWT(token):
     else:
         try:
             decodedToken = jwt.decode(token, app.config["SECRET_KEY"], algorithms="HS256")
-            print('verifyJWT.decodedToken:', decodedToken)
             if decodedToken:
-                print('verifyJWT.decodedToken.authkey:', decodedToken["authkey"])
-                print('verifyJWT.decodedToken.email:', decodedToken["email"])
                 conn = sqlite3.connect('pyBook.db')
                 cursor = conn.cursor()
 
                 if cursor:
                     SQL = 'SELECT authkey FROM users WHERE email=?'
                     cursor.execute(SQL, (decodedToken["email"],))
-                    authkey = cursor.fetchone()["authkey"]
-                    print('verifyJWT.db.authKey:', authkey)
+                    authkey = cursor.fetchone()[0]
                     cursor.close()
-
                 conn.close()
-
-                # print('verifyJWT.db.authKey:', authkey)
 
                 if authkey == decodedToken["authkey"]:
                     return True
