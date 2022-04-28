@@ -46,4 +46,45 @@
     </div>
 </body>
 <script type="text/javascript" src="static/js/navbar.js"></script>
+<script>
+    let email = document.querySelector('#email_input');
+    let submitButton = document.querySelector('#submit_button');
+    let cancelButton = document.querySelector('#cancel_button');
+    let msg_div = document.querySelector('#reset_passwd_email_message_div');
+
+    function onSubmitHandler() {
+
+        let formData = new FormData();
+        formData.set("email", email.value);
+
+        fetch('/api/user/resetpw', {
+            method: 'POST',
+            body: formData
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            let success = resBody["success"]
+            console.log('reset_passwd.resBody.success:', success);
+            if(success){
+                let url = '/home';
+                window.location.replace(url);
+            }
+            else{
+                let message = resBody["message"];
+                msg_div.innerHTML = message;
+            }
+        }).catch((error) => {
+            console.log('[Error]reset_passwd:', error);
+        });
+    }
+
+    submitButton.addEventListener('click', onSubmitHandler);
+
+    function onCancelHandler() {
+        let url = '/home';
+        window.location.replace(url);
+    }
+
+    cancelButton.addEventListener('click', onCancelHandler);
+</script>
 </html>

@@ -8,10 +8,8 @@ app.config["SECRET_KEY"] = 'e2a14e9612b8bdfc57201cfce12b6c8f'
 app.config["MAIL_SERVER"] = 'smtp.gmail.com'
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = 'sgkim08@gmail.com'
-# app.config["MAIL_USERNAME"] = 'YOUR_ACCOUNT'
-app.config["MAIL_PASSWORD"] = ''
-# app.config["MAIL_PASSWORD"] = 'YOUR_PASSWORD'
+app.config["MAIL_USERNAME"] = 'YOUR_ACCOUNT'
+app.config["MAIL_PASSWORD"] = 'YOUR_PASSWORD'
 
 mail = Mail(app)
 

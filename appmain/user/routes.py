@@ -4,8 +4,9 @@ import bcrypt
 import secrets
 import jwt
 import secrets
+from flask_mail import Message
 
-from appmain import app
+from appmain import app, mail
 
 from appmain.utils import verifyJWT, getJWTContent
 
@@ -182,8 +183,46 @@ def updateMyInfo():
     response = make_response(jsonify(payload), 200)
     return response
 
+@user.route('/resetpw')
+def resetpw():
+    return send_from_directory(app.root_path, 'templates/reset_passwd.html')
+
 @user.route('/api/user/resetpw', methods=['POST'])
-def resetPassWd():
-    randPW = secrets.token_hex(8)
+def checkAndSendNewPW():
 
+    data = request.form
+    email = data.get("email")
 
+    print('checkAndSendNewPW.email:', email)
+
+    payload = {"success": False}
+
+    conn = sqlite3.connect('pyBook.db')
+    cursor = conn.cursor()
+
+    if cursor:
+        SQL = 'SELECT id FROM users WHERE email=?'
+        cursor.execute(SQL, (email,))
+        id = cursor.fetchone()[0]
+
+        if id:
+            randPW = secrets.token_hex(8)
+            hashedPW = bcrypt.hashpw(randPW.encode('utf-8'), bcrypt.gensalt())
+
+            SQL = 'UPDATE users SET passwd=? WHERE id=?'
+            cursor.execute(SQL, (hashedPW, id))
+            conn.commit()
+
+            cursor.close()
+            conn.close()
+
+            msg = Message(subject='임시 비밀번호', sender='noreply@example.com', recipients=[email])
+            msg.body = '임시 비밀번호입니다: ' + randPW
+            mail.send(msg)
+
+            payload = {"success": True}
+        else:
+            payload = {"success": False, "message": '등록되어 있지 않은 이메일입니다.'}
+
+    response = make_response(jsonify(payload), 200)
+    return response
