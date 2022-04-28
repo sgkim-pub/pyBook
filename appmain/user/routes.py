@@ -3,6 +3,7 @@ import sqlite3
 import bcrypt
 import secrets
 import jwt
+import secrets
 
 from appmain import app
 
@@ -180,3 +181,9 @@ def updateMyInfo():
 
     response = make_response(jsonify(payload), 200)
     return response
+
+@user.route('/api/user/resetpw', methods=['POST'])
+def resetPassWd():
+    randPW = secrets.token_hex(8)
+
+

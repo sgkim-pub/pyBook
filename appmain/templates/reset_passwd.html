@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <title>Reset PW</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row navbar bg-light align-items-center mb-5">
+            <div class="col-6">
+                <a class="nav-link" href="/home"><h4>pyBook</h4></a>
+            </div>
+            <div class="col-6">
+                <ul class="nav justify-content-end">
+                  <li class="nav-item">
+                    <a class="nav-link" id="signup_link" href="/signup">SignUp</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="signin_link" href="/signin">SignIn</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="signout_link" href="#">SignOut</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="myinfo_link" href="/myinfo">MyInfo</a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            입력하신 메일 주소로 임시 비밀번호를 보내드립니다.
+            <form>
+                <div class="mb-3">
+                    <label for="email_input" class="form-label">이메일</label>
+                    <input type="text" class="form-control" id="email_input">
+                </div>
+            </form>
+        </div>
+        <div id="reset_passwd_email_message_div"></div>
+        <div class="row justify-content-center">
+            <div class="col-4 text-center">
+                <button type="button" class="btn btn-primary" id="submit_button">요청</button>
+                <button type="button" class="btn btn-secondary" id="cancel_button">취소</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="static/js/navbar.js"></script>
+</html>
