@@ -203,9 +203,10 @@ def checkAndSendNewPW():
     if cursor:
         SQL = 'SELECT id FROM users WHERE email=?'
         cursor.execute(SQL, (email,))
-        id = cursor.fetchone()[0]
+        result = cursor.fetchone()
 
-        if id:
+        if result:
+            id = result[0]
             randPW = secrets.token_hex(8)
             hashedPW = bcrypt.hashpw(randPW.encode('utf-8'), bcrypt.gensalt())
 
