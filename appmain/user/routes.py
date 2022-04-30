@@ -219,7 +219,9 @@ def checkAndSendNewPW():
 
             msg = Message(subject='임시 비밀번호', sender='noreply@example.com', recipients=[email])
             msg.body = '임시 비밀번호입니다: ' + randPW
-            mail.send(msg)
+
+            print('checkAndSendNewPW.msg:', msg)
+            # mail.send(msg)
 
             payload = {"success": True}
         else:
