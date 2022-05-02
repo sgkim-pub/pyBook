@@ -77,9 +77,43 @@
     function onSubmitHandler() {
         console.log('create_article.category:', category.value);
         console.log('create_article.title:', title.value);
-        console.log('create_article.picture:', picture.value);
+        console.log('create_article.picture:', picture.files[0]);
         console.log('create_article.desc:', desc.value);
         console.log('create_article.price:', price.value);
+
+        let headerData = new Headers();
+        let authToken = sessionStorage.getItem("authtoken");
+        console.log('create_article.authtoken:', authToken);
+        if(authToken){
+            headerData.set("authtoken", authToken);
+        }
+
+        let formData = new FormData();
+
+        formData.set("category", category.value);
+        formData.set("title", title.value);
+        formData.set("picture", picture.files[0]);
+        formData.set("desc", desc.value);
+        formData.set("price", price.value);
+
+        fetch('api/article/create', {
+            method: 'POST',
+            headers: headerData,
+            body: formData
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            console.log('create_article.onSubmitHandler.typeof(success):', typeof(resBody["success"]));
+            if(resBody["success"] === true){
+                console.log('create_article.onSubmitHandler.success:', 'true');
+            }
+            if(resBody["success"] === false){
+                console.log('create_article.onSubmitHandler.success:', 'false');
+            }
+            // console.log('create_article.onSubmitHandler.success:', resBody["success"]);
+        }).catch((error) => {
+            console.log('[Error]create_article.onSubmitHandler: error');
+        });
     }
 
     let submitButton = document.querySelector('#submit_button');
