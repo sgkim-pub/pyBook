@@ -3,7 +3,7 @@ import sqlite3
 
 from appmain import app
 
-from appmain.utils import verifyJWT, getJWTContent
+from appmain.utils import verifyJWT, getJWTContent, savePic
 
 article = Blueprint('article', __name__)
 
@@ -19,37 +19,59 @@ def createArticle():
     files =request.files
 
     authToken = headerData.get("authtoken")
-    print('createArticle.authtoken', authToken)
+
+    payload = {"success": False}
 
     if authToken:
         isValid = verifyJWT(authToken)
 
         if isValid:
-            print('createArticle.isValid:', isValid)
             token = getJWTContent(authToken)
             username = token["username"]
 
             category = data.get("category")
             title = data.get("title")
             desc = data.get("desc")
+            price = data.get("price")
 
             if files:
-                print('createArticle.files', files)
+                # print('createArticle.files', files)
+                picFileName = savePic(files["picture"], username)
 
-            print('createArticle.username', username)
-            print('createArticle.category', category)
-            print('createArticle.title', title)
-            print('createArticle.desc', desc)
+            # print('createArticle.username', username)
+            # print('createArticle.category', category)
+            # print('createArticle.title', title)
+            # print('createArticle.desc', desc)
 
-            # conn = sqlite3.connect('pyBook.db')
-            # cursor = conn.cursor()
-            #
-            #     if cursor:
+            conn = sqlite3.connect('pyBook.db')
+            cursor = conn.cursor()
+
+            if cursor:
+                SQL = 'INSERT INTO articles (author, title, category, description, price, picture) \
+                VALUES (?, ?, ?, ?, ?, ?)'
+                cursor.execute(SQL, (username, title, category, desc, price, picFileName))
+                rowId = cursor.lastrowid
+                conn.commit()
+
+                # SQL = "PRAGMA table_info(articles)"
+                # cursor.execute(SQL)
+                # rows = cursor.fetchall()
+                # for row in rows:
+                #     print(row)
+
+                SQL = 'SELECT * FROM articles'
+                cursor.execute(SQL)
+                rows = cursor.fetchall()
+                for row in rows:
+                    print(row)
+
+                cursor.close()
+            conn.close()
+
+            payload = {"success": True, "articleNo": rowId}
         else:
             pass
     else:
         pass
-
-    payload = {"success": False}
 
     return make_response(jsonify(payload), 200)

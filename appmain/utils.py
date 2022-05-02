@@ -1,5 +1,8 @@
 import jwt
 import sqlite3
+import secrets
+from PIL import Image
+import os
 
 from appmain import app
 
@@ -39,3 +42,16 @@ def getJWTContent(token):
     else:
         return None
 
+
+def savePic(pic, username):
+    randHex = secrets.token_hex(8)
+    _, fExt = os.path.splitext(pic.filename)
+    picFileName = randHex + fExt
+    picDir = os.path.join(app.static_folder, 'pics', username)
+    picPath = os.path.join(picDir, picFileName)
+    os.makedirs(picDir, exist_ok=True)
+
+    with Image.open(pic) as image:
+        image.save(picPath)
+
+    return picFileName

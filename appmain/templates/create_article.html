@@ -74,46 +74,63 @@
     let desc = document.querySelector('#desc_input');
     let price = document.querySelector('#price_input');
 
-    function onSubmitHandler() {
-        console.log('create_article.category:', category.value);
-        console.log('create_article.title:', title.value);
-        console.log('create_article.picture:', picture.files[0]);
-        console.log('create_article.desc:', desc.value);
-        console.log('create_article.price:', price.value);
+    let title_msg = document.querySelector('#title_input_msg');
+    let price_msg = document.querySelector('#price_input_msg');
 
-        let headerData = new Headers();
-        let authToken = sessionStorage.getItem("authtoken");
-        console.log('create_article.authtoken:', authToken);
-        if(authToken){
-            headerData.set("authtoken", authToken);
+    function checkTitleAndPrice() {
+        let isTitleValid = title.value.length > 0 && title.value.length <= 25;
+
+        if(!isTitleValid){
+            title_msg.innerHTML = '제목을 1~25 길이로 입력해주세요.';
+        }
+        else{
+            title_msg.innerHTML = ' ';
         }
 
-        let formData = new FormData();
+        let isPriceValid = price.value > 0 && price.value < 100000;
 
-        formData.set("category", category.value);
-        formData.set("title", title.value);
-        formData.set("picture", picture.files[0]);
-        formData.set("desc", desc.value);
-        formData.set("price", price.value);
+        if(!isPriceValid){
+            price_msg.innerHTML = '가격을 1~100,000원 사이로 입력해주세요.';
+        }
+        else{
+            price_msg.innerHTML = ' ';
+        }
 
-        fetch('api/article/create', {
-            method: 'POST',
-            headers: headerData,
-            body: formData
-        }).then((response) => {
-            return response.json();
-        }).then((resBody) => {
-            console.log('create_article.onSubmitHandler.typeof(success):', typeof(resBody["success"]));
-            if(resBody["success"] === true){
-                console.log('create_article.onSubmitHandler.success:', 'true');
+        return isTitleValid && isPriceValid;
+    }
+
+    function onSubmitHandler() {
+        let isTitleAndPriceValid = checkTitleAndPrice();
+
+        if(isTitleAndPriceValid === true){
+            let headerData = new Headers();
+            let authToken = sessionStorage.getItem("authtoken");
+            console.log('create_article.authtoken:', authToken);
+            if(authToken){
+                headerData.set("authtoken", authToken);
             }
-            if(resBody["success"] === false){
-                console.log('create_article.onSubmitHandler.success:', 'false');
-            }
-            // console.log('create_article.onSubmitHandler.success:', resBody["success"]);
-        }).catch((error) => {
-            console.log('[Error]create_article.onSubmitHandler: error');
-        });
+
+            let formData = new FormData();
+
+            formData.set("category", category.value);
+            formData.set("title", title.value);
+            formData.set("picture", picture.files[0]);
+            formData.set("desc", desc.value);
+            formData.set("price", price.value);
+
+            fetch('/api/article/create', {
+                method: 'POST',
+                headers: headerData,
+                body: formData
+            }).then((response) => {
+                return response.json();
+            }).then((resBody) => {
+                console.log('create_article.onSubmitHandler.success:', resBody["success"]);
+                console.log('create_article.onSubmitHandler.articleNo:', resBody["articleNo"]);
+            }).catch((error) => {
+                console.log('[Error]create_article.onSubmitHandler:', error);
+            });
+        }
     }
 
     let submitButton = document.querySelector('#submit_button');
