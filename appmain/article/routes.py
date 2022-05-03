@@ -47,9 +47,14 @@ def createArticle():
             cursor = conn.cursor()
 
             if cursor:
-                SQL = 'INSERT INTO articles (author, title, category, description, price, picture) \
-                VALUES (?, ?, ?, ?, ?, ?)'
-                cursor.execute(SQL, (username, title, category, desc, price, picFileName))
+                if files:
+                    SQL = 'INSERT INTO articles (author, title, category, description, price, picture) \
+                    VALUES (?, ?, ?, ?, ?, ?)'
+                    cursor.execute(SQL, (username, title, category, desc, price, picFileName))
+                else:
+                    SQL = 'INSERT INTO articles (author, title, category, description, price) \
+                    VALUES (?, ?, ?, ?, ?)'
+                    cursor.execute(SQL, (username, title, category, desc, price))
                 rowId = cursor.lastrowid
                 conn.commit()
 
