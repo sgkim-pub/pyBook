@@ -41,24 +41,106 @@
         <div class="row justify-content-center mt-5">
             <div class="col-10"><hr></div>
         </div>
-        <div class="row justify-content-center mt-3" id="recent_books">
-            <div class="col-8">
-                <div class="card">
-                    <h5 class="card-header">
-                        <a class="link-primary text-decoration-none" href="#">Title</a>
-                    </h5>
-                    <p class="card-text text-truncate px-3 py-2">
-                        <a class="link-secondary text-decoration-none" href="#">
-                            With supporting text below as a natural lead-in to additional content.
-                            With supporting text below as a natural lead-in to additional content.
-                            With supporting text below as a natural lead-in to additional content.
-                            With supporting text below as a natural lead-in to additional content.
-                        </a>
-                    </p>
-                </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-8" id="recent_articles_div">
+<!--                <div class="card">-->
+<!--                    <h5 class="card-header">-->
+<!--                        <a class="link-primary text-decoration-none" href="#">Title</a>-->
+<!--                    </h5>-->
+<!--                    <p class="card-text text-truncate px-3 py-2">-->
+<!--                        <a class="link-secondary text-decoration-none" href="#">-->
+<!--                            With supporting text below as a natural lead-in to additional content.-->
+<!--                            With supporting text below as a natural lead-in to additional content.-->
+<!--                            With supporting text below as a natural lead-in to additional content.-->
+<!--                            With supporting text below as a natural lead-in to additional content.-->
+<!--                        </a>-->
+<!--                    </p>-->
+<!--                </div>-->
             </div>
         </div>
     </div>
 </body>
 <script type="text/javascript" src="static/js/navbar.js"></script>
+<script>
+    let recentArticlesDiv = document.querySelector('#recent_articles_div');
+
+    function translateCategory(catId) {
+        let category = '미분류';
+        switch(catId){
+            case 0:
+                category = '인문';
+                break;
+            case 1:
+                category = '사회과학';
+                break;
+            case 2:
+                category = '자연과학';
+                break;
+            case 3:
+                category = '의학';
+                break;
+            case 4:
+                category = '경제/경영';
+                break;
+            case 5:
+                category = '공학';
+                break;
+            case 6:
+                category = '음악';
+                break;
+            case 7:
+                category = '미술';
+                break;
+            case 8:
+                category = '기타';
+                break;
+            default:
+                category = '미분류';
+                break;
+        }
+        return category;
+    }
+
+    function displayRecentArticles(articles) {
+        articles.forEach((article) => {
+            let title = article["title"];
+            let category = translateCategory(article["category"]);
+            let desc = article["desc"];
+            let price = article["price"];
+            let picURL = article["picURL"];
+
+            let cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+
+            let articleElement = `
+                <h5 class="card-header">
+                    <a class="link-primary text-decoration-none" href="#">${title}</a>
+                </h5>
+                <p class="card-text text-truncate px-3 py-2">
+                    <a class="link-secondary text-decoration-none" href="#">
+                        ${desc}
+                    </a>
+                </p>
+            `;
+
+            cardDiv.innerHTML = articleElement;
+            recentArticlesDiv.appendChild(cardDiv);
+        });
+    }
+
+    window.addEventListener('load', getRecentArticles);
+
+    function getRecentArticles() {
+        fetch('/api/article/recent', {
+            method: 'GET'
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            console.log('getRecentArticles().resBody:', resBody);
+            displayRecentArticles(resBody["articles"]);
+        }).catch((error) => {
+            console.log('[Error]getRecentArticles():', error);
+        });
+    }
+</script>
 </html>

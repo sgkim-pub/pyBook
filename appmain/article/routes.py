@@ -1,4 +1,4 @@
-from flask import Blueprint, send_from_directory, make_response, jsonify, request
+from flask import Blueprint, send_from_directory, make_response, jsonify, request, url_for
 import sqlite3
 
 from appmain import app
@@ -73,5 +73,36 @@ def createArticle():
             pass
     else:
         pass
+
+    return make_response(jsonify(payload), 200)
+
+@article.route('/api/article/recent', methods=['GET'])
+def getRecentArticles():
+
+    payload = {"success": False}
+
+    conn = sqlite3.connect('pyBook.db')
+    cursor = conn.cursor()
+
+    if cursor:
+        SQL = 'SELECT articleNo, author, title, category, description, price, picture \
+        FROM articles ORDER BY articleNo DESC LIMIT 6'
+        cursor.execute(SQL)
+        recentArticleTuples = cursor.fetchall()
+
+        cursor.close()
+    conn.close()
+
+    recentArticleDics = []
+
+    if len(recentArticleTuples) > 0:
+        for article in recentArticleTuples:
+            picFilePath = 'pics/' + article[1] + '/' + article[6]
+            picURL = url_for('static', filename=picFilePath, _external=True)
+            recentArticleDics.append({"articleNo": article[0], "author": article[1], "title": article[2],
+                                      "category": article[3], "desc": article[4], "price": article[5],
+                                      "picURL": picURL})
+
+        payload = {"success": True, "articles": recentArticleDics}
 
     return make_response(jsonify(payload), 200)
