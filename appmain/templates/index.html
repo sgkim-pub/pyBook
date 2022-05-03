@@ -45,21 +45,7 @@
             <div class="col-10"><hr></div>
         </div>
         <div class="row justify-content-center mt-3">
-            <div class="col-8" id="recent_articles_div">
-<!--                <div class="card">-->
-<!--                    <h5 class="card-header">-->
-<!--                        <a class="link-primary text-decoration-none" href="#">Title</a>-->
-<!--                    </h5>-->
-<!--                    <p class="card-text text-truncate px-3 py-2">-->
-<!--                        <a class="link-secondary text-decoration-none" href="#">-->
-<!--                            With supporting text below as a natural lead-in to additional content.-->
-<!--                            With supporting text below as a natural lead-in to additional content.-->
-<!--                            With supporting text below as a natural lead-in to additional content.-->
-<!--                            With supporting text below as a natural lead-in to additional content.-->
-<!--                        </a>-->
-<!--                    </p>-->
-<!--                </div>-->
-            </div>
+            <div class="col-8" id="recent_articles_div"></div>
         </div>
     </div>
 </body>
@@ -106,18 +92,21 @@
 
     function displayRecentArticles(articles) {
         articles.forEach((article) => {
+            let articleNo = article["articleNo"];
             let title = article["title"];
             let desc = article["desc"];
 
             let cardDiv = document.createElement('div');
-            cardDiv.className = 'card';
+            cardDiv.className = 'card mt-2';
 
             let articleElement = `
                 <h5 class="card-header">
-                    <a class="link-primary text-decoration-none" href="#">${title}</a>
+                    <a class="link-primary text-decoration-none" href="/display_article/${articleNo}">
+                        ${title}
+                    </a>
                 </h5>
                 <p class="card-text text-truncate px-3 py-2">
-                    <a class="link-secondary text-decoration-none" href="#">
+                    <a class="link-secondary text-decoration-none" href="/display_article/${articleNo}">
                         ${desc}
                     </a>
                 </p>
