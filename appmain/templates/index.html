@@ -104,10 +104,7 @@
     function displayRecentArticles(articles) {
         articles.forEach((article) => {
             let title = article["title"];
-            let category = translateCategory(article["category"]);
             let desc = article["desc"];
-            let price = article["price"];
-            let picURL = article["picURL"];
 
             let cardDiv = document.createElement('div');
             cardDiv.className = 'card';
