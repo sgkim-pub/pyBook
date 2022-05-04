@@ -141,8 +141,6 @@ def updateMyInfo():
     username = data.get("username")
     passwd = data.get("passwd")
 
-    print('updateMyInfo.authToken:', authToken)
-
     payload = {"success": False}
 
     if authToken:
@@ -187,8 +185,6 @@ def checkAndSendNewPW():
 
     data = request.form
     email = data.get("email")
-
-    print('checkAndSendNewPW.email:', email)
 
     payload = {"success": False}
 
