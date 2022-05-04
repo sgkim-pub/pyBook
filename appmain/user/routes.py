@@ -141,21 +141,14 @@ def updateMyInfo():
     username = data.get("username")
     passwd = data.get("passwd")
 
-    print('updateMyInfo.authToken:', authToken)
-
     payload = {"success": False}
 
     if authToken:
         isValid = verifyJWT(authToken)
-        print('updateMyInfo.isValid:', isValid)
 
         if isValid:
             token = getJWTContent(authToken)
             email = token["email"]
-
-            print('updateMyInfo.email:', email)
-            print('updateMyInfo.new_username:', username)
-            print('updateMyInfo.new_passwd:', passwd)
 
             hashedPW = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
 
@@ -192,8 +185,6 @@ def checkAndSendNewPW():
 
     data = request.form
     email = data.get("email")
-
-    print('checkAndSendNewPW.email:', email)
 
     payload = {"success": False}
 
