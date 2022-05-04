@@ -105,7 +105,6 @@
         if(isTitleAndPriceValid === true){
             let headerData = new Headers();
             let authToken = sessionStorage.getItem("authtoken");
-            console.log('create_article.authtoken:', authToken);
             if(authToken){
                 headerData.set("authtoken", authToken);
             }

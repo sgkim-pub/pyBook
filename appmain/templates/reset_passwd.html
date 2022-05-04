@@ -73,7 +73,6 @@
             return response.json();
         }).then((resBody) => {
             let success = resBody["success"]
-            console.log('reset_passwd.resBody.success:', success);
             if(success){
                 let url = '/home';
                 window.location.replace(url);

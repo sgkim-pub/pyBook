@@ -58,12 +58,6 @@ def createArticle():
                 rowId = cursor.lastrowid
                 conn.commit()
 
-                # SQL = "PRAGMA table_info(articles)"
-                # cursor.execute(SQL)
-                # rows = cursor.fetchall()
-                # for row in rows:
-                #     print(row)
-
                 SQL = 'SELECT * FROM articles'
                 cursor.execute(SQL)
                 rows = cursor.fetchall()
@@ -97,8 +91,6 @@ def getRecentArticles():
 
         cursor.close()
     conn.close()
-
-    print('getRecentArticles().recentArticleTuples:', recentArticleTuples)
 
     recentArticleDics = []
 
