@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <title>Display Article</title>
 </head>
 <body>
@@ -35,8 +35,15 @@
 
     </div>
 </body>
-<script type="text/javascript" src="static/js/navbar.js"></script>
+<script type="text/javascript" src="/static/js/navbar.js"></script>
 <script>
+    function getArticleNo() {
+        const location = window.location.href;
+        const url = new URL(location);
+        console.log(url.hostname);
+        console.log(url.pathname);
+    }
 
+    window.addEventListener('load', getArticleNo);
 </script>
 </html>
