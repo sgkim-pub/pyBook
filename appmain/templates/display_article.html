@@ -40,8 +40,7 @@
     function getArticleNo() {
         const location = window.location.href;
         const url = new URL(location);
-        console.log(url.hostname);
-        console.log(url.pathname);
+        const articleNo = url.pathname.split('/')[2];
     }
 
     window.addEventListener('load', getArticleNo);
