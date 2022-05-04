@@ -92,8 +92,6 @@ def getRecentArticles():
         cursor.close()
     conn.close()
 
-    print('getRecentArticles().recentArticleTuples:', recentArticleTuples)
-
     recentArticleDics = []
 
     if len(recentArticleTuples) > 0:
