@@ -53,43 +53,6 @@
 <script>
     let recentArticlesDiv = document.querySelector('#recent_articles_div');
 
-    function translateCategory(catId) {
-        let category = '미분류';
-        switch(catId){
-            case 0:
-                category = '인문';
-                break;
-            case 1:
-                category = '사회과학';
-                break;
-            case 2:
-                category = '자연과학';
-                break;
-            case 3:
-                category = '의학';
-                break;
-            case 4:
-                category = '경제/경영';
-                break;
-            case 5:
-                category = '공학';
-                break;
-            case 6:
-                category = '음악';
-                break;
-            case 7:
-                category = '미술';
-                break;
-            case 8:
-                category = '기타';
-                break;
-            default:
-                category = '미분류';
-                break;
-        }
-        return category;
-    }
-
     function displayRecentArticles(articles) {
         articles.forEach((article) => {
             let articleNo = article["articleNo"];
