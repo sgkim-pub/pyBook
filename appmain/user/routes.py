@@ -147,15 +147,10 @@ def updateMyInfo():
 
     if authToken:
         isValid = verifyJWT(authToken)
-        print('updateMyInfo.isValid:', isValid)
 
         if isValid:
             token = getJWTContent(authToken)
             email = token["email"]
-
-            print('updateMyInfo.email:', email)
-            print('updateMyInfo.new_username:', username)
-            print('updateMyInfo.new_passwd:', passwd)
 
             hashedPW = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
 
