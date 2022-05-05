@@ -150,8 +150,11 @@ def translateCategory(catId):
 
     return category
 
-@article.route('/api/article/display/<int:articleNo>', methods=['GET', 'POST'])
-def displayArticle(articleNo):
+@article.route('/api/article/display', methods=['GET', 'POST'])
+def displayArticle():
+
+    data = request.form
+    articleNo = data.get("articleNo")
 
     payload = {"success": False}
 
@@ -160,7 +163,7 @@ def displayArticle(articleNo):
 
     if cursor:
         SQL = 'SELECT author, title, category, description, price, picture FROM articles WHERE articleNo=?'
-        cursor.execute(SQL, articleNo)
+        cursor.execute(SQL, (articleNo,))
         result = cursor.fetchone()
 
         cursor.close()
