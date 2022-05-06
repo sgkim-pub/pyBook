@@ -165,3 +165,7 @@ def displayArticle():
         payload = {"success": True, "article": None}
 
     return make_response(jsonify(payload), 200)
+
+@article.route('/update_article/<int:articleNo>', methods=['GET'])
+def updateArticlePage(articleNo):
+    return send_from_directory(app.root_path, 'templates/update_article.html')
