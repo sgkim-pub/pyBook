@@ -169,8 +169,6 @@ def displayArticle():
         cursor.close()
     conn.close()
 
-    print('displayArticle().article:', result)
-
     if result:
         if result[5]:
             picFilePath = 'pics/' + result[0] + '/' + result[5]
