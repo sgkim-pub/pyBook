@@ -115,14 +115,6 @@ def getRecentArticles():
 @article.route('/display_article/<int:articleNo>', methods=['GET'])
 def displayArticlePage(articleNo):
     return send_from_directory(app.root_path, 'templates/display_article.html')
-    # return make_response(send_from_directory(app.root_path, 'templates/display_article.html'),
-    #                      jsonify({0: 1}), 200)
-
-    # response = make_response(send_from_directory(app.root_path, 'templates/display_article.html'), 200)
-    # response.data["articleNo"] = articleNo
-    # response.set_data("articleNo", str(articleNo))
-
-    # return response
 
 def translateCategory(catId):
     category = '미분류'
