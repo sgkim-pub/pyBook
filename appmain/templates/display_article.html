@@ -68,8 +68,12 @@
         let descSection = document.querySelector('#article_desc_section');
         let imageFigure = document.querySelector('#article_image_fig');
 
+        let authToken = window.sessionStorage.getItem("authtoken");
+        let userName = window.sessionStorage.getItem("username");
+        let isEditable = authToken && userName === authorData;
+
         let titleDiv = document.createElement('div');
-        titleDiv.className = 'col-7';
+        titleDiv.className = isEditable ? 'col-5' : 'col-7';
         titleDiv.id = 'article_title';
         title = '[' + categoryData + '] ' + titleData
         titleDiv.appendChild(document.createTextNode(title));
@@ -81,6 +85,18 @@
         authorDiv.id = 'article_author';
         authorDiv.appendChild(document.createTextNode(authorData));
         titleSection.appendChild(authorDiv);
+
+        if(isEditable){
+            let editButtonsDiv = document.createElement('div');
+            editButtonsDiv.className = 'col-2 text-center';
+
+            let buttons = `<button type="button" class="btn btn-primary btn-sm" id="edit_button">수정</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="delete_button">삭제</button>`;
+
+            editButtonsDiv.innerHTML = buttons;
+
+            titleSection.appendChild(editButtonsDiv);
+        }
 
         let descDiv = document.createElement('div');
         descDiv.className = 'col-9';
@@ -115,6 +131,18 @@
         }).catch((error) => {
             console.log('[Error]getArticle():', error);
         });
+    }
+
+    function onEditButtonHandler() {
+        const articleNo = getArticleNo();
+
+        let editPage = '/update_article/' + articleNo;
+        window.location.replace(editPage);
+    }
+
+    function onDeleteButtonHandler() {
+        const articleNo = getArticleNo();
+
     }
 
     window.addEventListener('load', getArticle);
