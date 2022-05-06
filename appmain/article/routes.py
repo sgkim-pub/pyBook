@@ -96,16 +96,6 @@ def getRecentArticles():
 
     if len(recentArticleTuples) > 0:
         for article in recentArticleTuples:
-            # if article[6]:
-            #     picFilePath = 'pics/' + article[1] + '/' + article[6]
-            #     picURL = url_for('static', filename=picFilePath, _external=True)
-            # else:
-            #     picURL = None
-            #
-            # recentArticleDics.append({"articleNo": article[0], "author": article[1], "title": article[2],
-            #                           "category": article[3], "desc": article[4], "price": article[5],
-            #                           "picURL": picURL})
-
             recentArticleDics.append({"articleNo": article[0], "title": article[2], "desc": article[4]})
 
         payload = {"success": True, "articles": recentArticleDics}
