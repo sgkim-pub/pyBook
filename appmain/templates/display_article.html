@@ -90,12 +90,26 @@
             let editButtonsDiv = document.createElement('div');
             editButtonsDiv.className = 'col-2 text-center';
 
+            function onClickEditBtnHandler() {
+                const articleNo = getArticleNo();
+
+                let editPage = '/update_article/' + articleNo;
+                window.location.replace(editPage);
+            }
+
+            function onDeleteButtonHandler() {
+                const articleNo = getArticleNo();
+            }
+
             let buttons = `<button type="button" class="btn btn-primary btn-sm" id="edit_button">수정</button>
                 <button type="button" class="btn btn-secondary btn-sm" id="delete_button">삭제</button>`;
 
             editButtonsDiv.innerHTML = buttons;
 
             titleSection.appendChild(editButtonsDiv);
+
+            let editButton = document.querySelector('#edit_button');
+            editButton.addEventListener('click', onClickEditBtnHandler);
         }
 
         let descDiv = document.createElement('div');
@@ -133,20 +147,6 @@
         });
     }
 
-    function onEditButtonHandler() {
-        const articleNo = getArticleNo();
-
-        let editPage = '/update_article/' + articleNo;
-        window.location.replace(editPage);
-    }
-
-    function onDeleteButtonHandler() {
-        const articleNo = getArticleNo();
-
-    }
-
     window.addEventListener('load', getArticle);
-
-
 </script>
 </html>

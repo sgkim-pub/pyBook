@@ -169,3 +169,4 @@ def displayArticle():
 @article.route('/update_article/<int:articleNo>', methods=['GET'])
 def updateArticlePage(articleNo):
     return send_from_directory(app.root_path, 'templates/update_article.html')
+
