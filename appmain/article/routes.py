@@ -172,7 +172,7 @@ def displayArticle():
 def updateArticlePage(articleNo):
     return send_from_directory(app.root_path, 'templates/update_article.html')
 
-@article.route('/api/article/create', methods=['POST'])
+@article.route('/api/article/update', methods=['POST'])
 def updateArticle():
     headerData = request.headers
     data = request.form
@@ -195,33 +195,77 @@ def updateArticle():
             desc = data.get("desc")
             price = data.get("price")
 
-            if files:
-                conn = sqlite3.connect('pyBook.db')
-                cursor = conn.cursor()
+            conn = sqlite3.connect('pyBook.db')
+            cursor = conn.cursor()
 
-                if cursor:
-                    SQL = 'SELECT picture FROM articles WHERE articleNo=?'
-                    cursor.execute(SQL, (articleNo,))
-                    result = cursor.fetchone()
+            if cursor:
+                SQL = 'SELECT author FROM articles WHERE articleNo=?'
+                cursor.execute(SQL, (articleNo,))
+                result = cursor.fetchone()
+                cursor.close()
+            conn.close()
 
-                    if result:
-                        oldPicFileName = result[0]
-                        oldPicFilePath = os.path.join(app.static_folder, 'pics', username, oldPicFileName)
+            print('updateArticle.token.username:%s' % username)
+            print('updateArticle.username:%s' % result[0])
 
-                        # if os.path.isfile(oldPicFilePath):
-                        #     os.remove(oldPicFilePath)
+            if(result[0] == username):
+                if files:
+                    conn = sqlite3.connect('pyBook.db')
+                    cursor = conn.cursor()
 
-                        print('updateArticle.oldPicFilePath:%s' % oldPicFilePath)
+                    if cursor:
+                        SQL = 'SELECT picture FROM articles WHERE articleNo=?'
+                        cursor.execute(SQL, (articleNo,))
+                        result = cursor.fetchone()
 
-                    newPicFileName = savePic(files["picture"], username)
+                        if result:
+                            oldPicFileName = result[0]
+                            oldPicFilePath = os.path.join(app.static_folder, 'pics', username, oldPicFileName)
 
-                    SQL = 'UPDATE articles SET category=?, title=?, desc=?, picture=?, price=? WHERE articleNo=?'
-                    cursor.execute(SQL, (category, title, desc, newPicFileName, price, articleNo))
+                            # if os.path.isfile(oldPicFilePath):
+                            #     os.remove(oldPicFilePath)
 
+                            print('updateArticle.oldPicFilePath:%s' % oldPicFilePath)
 
+                        newPicFileName = savePic(files["picture"], username)
 
-        else:
+                        SQL = 'UPDATE articles SET category=?, title=?, description=?, picture=?, price=? WHERE articleNo=?'
+                        cursor.execute(SQL, (category, title, desc, newPicFileName, price, articleNo))
+                        conn.commit()
+
+                        SQL = 'SELECT * FROM articles'
+                        cursor.execute(SQL)
+                        rows = cursor.fetchall()
+                        for row in rows:
+                            print(row)
+
+                        cursor.close()
+                    conn.close()
+
+                    payload = {"success": True}
+                else:   # if files
+                    conn = sqlite3.connect('pyBook.db')
+                    cursor = conn.cursor()
+
+                    if cursor:
+                        SQL = 'UPDATE articles SET category=?, title=?, description=?, price=? WHERE articleNo=?'
+                        cursor.execute(SQL, (category, title, desc, price, articleNo))
+                        conn.commit()
+
+                        SQL = 'SELECT * FROM articles'
+                        cursor.execute(SQL)
+                        rows = cursor.fetchall()
+                        for row in rows:
+                            print(row)
+
+                        cursor.close()
+                    conn.close()
+                    payload = {"success": True}
+            else:   # if(result[0] == username)
+                pass
+        else:   # if isValid
             pass
-    else:
+    else:   # if authToken
         pass
 
+    return make_response(jsonify(payload), 200)

@@ -147,7 +147,7 @@
         let articleNo = getArticleNo();
 
         let formData = new FormData();
-        formData.append("articleNo", articleNo);
+        formData.set("articleNo", articleNo);
 
         fetch('/api/article/display', {
             method: 'POST',
@@ -161,6 +161,25 @@
             console.log('[Error]UpdateArticle.getArticleData():', error);
         });
     }
+
+    function onChangePicFileInput() {
+        let picFile = picture.files[0];
+
+        console.log('UpdateArticle.onChangePicFileInput()', picFile);
+
+        let reader = new FileReader();
+
+        reader.addEventListener("load", function() {
+            let image = document.querySelector('#article_image_fig > img')
+            image.src = reader.result;
+        });
+
+        if(picFile){
+            reader.readAsDataURL(picFile);
+        }
+    }
+
+    picture.addEventListener('change', onChangePicFileInput);
 
     function onSubmitHandler() {
         let isTitleAndPriceValid = checkTitleAndPrice();
@@ -202,7 +221,7 @@
         history.back();
     }
 
-    submitButton.addEventListener('click', onSubmitHandler);
+    //submitButton.addEventListener('click', onSubmitHandler);
     cancelButton.addEventListener('click', onCancelHandler);
 
 </script>
