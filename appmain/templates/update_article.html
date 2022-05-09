@@ -120,7 +120,6 @@
     }
 
     function setArticleData(articleData) {
-
         const categoryString = articleData["category"];
 
         const categorySet = {"인문": 0, "사회과학": 1, "자연과학": 2, "의학": 3, "경제/경영": 4, "공학": 5,
@@ -164,7 +163,39 @@
     }
 
     function onSubmitHandler() {
+        let isTitleAndPriceValid = checkTitleAndPrice();
 
+        if(isTitleAndPriceValid === true){
+            let articleNo = getArticleNo();
+
+            let headerData = new Headers();
+            let authToken = sessionStorage.getItem("authtoken");
+            if(authToken){
+                headerData.set("authtoken", authToken);
+            }
+
+            let formData = new FormData();
+
+            formData.set("articleNo", articleNo);
+            formData.set("category", category.value);
+            formData.set("title", title.value);
+            formData.set("picture", picture.files[0]);
+            formData.set("desc", desc.value);
+            formData.set("price", price.value);
+
+            fetch('/api/article/update', {
+                method: 'POST',
+                headers: headerData,
+                body: formData
+            }).then((response) => {
+                return response.json();
+            }).then((resBody) => {
+                console.log('update_article.onSubmitHandler.success:', resBody["success"]);
+                console.log('update_article.onSubmitHandler.articleNo:', resBody["articleNo"]);
+            }).catch((error) => {
+                console.log('[Error]update_article.onSubmitHandler:', error);
+            });
+        }
     }
 
     function onCancelHandler() {

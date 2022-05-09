@@ -1,3 +1,5 @@
+import os
+
 from flask import Blueprint, send_from_directory, make_response, jsonify, request, url_for
 import sqlite3
 
@@ -169,4 +171,57 @@ def displayArticle():
 @article.route('/update_article/<int:articleNo>', methods=['GET'])
 def updateArticlePage(articleNo):
     return send_from_directory(app.root_path, 'templates/update_article.html')
+
+@article.route('/api/article/create', methods=['POST'])
+def updateArticle():
+    headerData = request.headers
+    data = request.form
+    files =request.files
+
+    authToken = headerData.get("authtoken")
+
+    payload = {"success": False}
+
+    if authToken:
+        isValid = verifyJWT(authToken)
+
+        if isValid:
+            token = getJWTContent(authToken)
+            username = token["username"]
+
+            articleNo = data.get("articleNo")
+            category = data.get("category")
+            title = data.get("title")
+            desc = data.get("desc")
+            price = data.get("price")
+
+            if files:
+                conn = sqlite3.connect('pyBook.db')
+                cursor = conn.cursor()
+
+                if cursor:
+                    SQL = 'SELECT picture FROM articles WHERE articleNo=?'
+                    cursor.execute(SQL, (articleNo,))
+                    result = cursor.fetchone()
+
+                    if result:
+                        oldPicFileName = result[0]
+                        oldPicFilePath = os.path.join(app.static_folder, 'pics', username, oldPicFileName)
+
+                        # if os.path.isfile(oldPicFilePath):
+                        #     os.remove(oldPicFilePath)
+
+                        print('updateArticle.oldPicFilePath:%s' % oldPicFilePath)
+
+                    newPicFileName = savePic(files["picture"], username)
+
+                    SQL = 'UPDATE articles SET category=?, title=?, desc=?, picture=?, price=? WHERE articleNo=?'
+                    cursor.execute(SQL, (category, title, desc, newPicFileName, price, articleNo))
+
+
+
+        else:
+            pass
+    else:
+        pass
 
