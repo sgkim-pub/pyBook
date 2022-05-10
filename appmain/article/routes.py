@@ -205,9 +205,6 @@ def updateArticle():
                 cursor.close()
             conn.close()
 
-            print('updateArticle.token.username:%s' % username)
-            print('updateArticle.username:%s' % result[0])
-
             if(result[0] == username):
                 if files:
                     conn = sqlite3.connect('pyBook.db')
@@ -222,10 +219,8 @@ def updateArticle():
                             oldPicFileName = result[0]
                             oldPicFilePath = os.path.join(app.static_folder, 'pics', username, oldPicFileName)
 
-                            # if os.path.isfile(oldPicFilePath):
-                            #     os.remove(oldPicFilePath)
-
-                            print('updateArticle.oldPicFilePath:%s' % oldPicFilePath)
+                            if os.path.isfile(oldPicFilePath):
+                                os.remove(oldPicFilePath)
 
                         newPicFileName = savePic(files["picture"], username)
 
@@ -233,16 +228,16 @@ def updateArticle():
                         cursor.execute(SQL, (category, title, desc, newPicFileName, price, articleNo))
                         conn.commit()
 
-                        SQL = 'SELECT * FROM articles'
-                        cursor.execute(SQL)
-                        rows = cursor.fetchall()
-                        for row in rows:
-                            print(row)
+                        # SQL = 'SELECT * FROM articles'
+                        # cursor.execute(SQL)
+                        # rows = cursor.fetchall()
+                        # for row in rows:
+                        #     print(row)
 
                         cursor.close()
                     conn.close()
 
-                    payload = {"success": True}
+                    payload = {"success": True, "articleNo": articleNo}
                 else:   # if files
                     conn = sqlite3.connect('pyBook.db')
                     cursor = conn.cursor()
@@ -252,15 +247,15 @@ def updateArticle():
                         cursor.execute(SQL, (category, title, desc, price, articleNo))
                         conn.commit()
 
-                        SQL = 'SELECT * FROM articles'
-                        cursor.execute(SQL)
-                        rows = cursor.fetchall()
-                        for row in rows:
-                            print(row)
+                        # SQL = 'SELECT * FROM articles'
+                        # cursor.execute(SQL)
+                        # rows = cursor.fetchall()
+                        # for row in rows:
+                        #     print(row)
 
                         cursor.close()
                     conn.close()
-                    payload = {"success": True}
+                    payload = {"success": True, "articleNo": articleNo}
             else:   # if(result[0] == username)
                 pass
         else:   # if isValid
