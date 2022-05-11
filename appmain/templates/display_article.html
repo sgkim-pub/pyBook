@@ -32,20 +32,21 @@
         </div>
     </div>
     <div class="container mt-5">
-        <div class="row justify-content-center" id="article_title_section">
+        <div class="row justify-content-center" id="article_title_div">
         </div>
         <div class="row justify-content-center">
             <div class="col-9">
                 <hr>
             </div>
         </div>
+        <div class="text-center" id="confirm_deletion_div"></div>
     </div>
     <div class="container mt-3">
-        <div class="row justify-content-center" id="article_desc_section">
+        <div class="row justify-content-center" id="article_desc_div">
         </div>
     </div>
     <div class="container mt-3">
-        <div class="row justify-content-center" id="article_image_section">
+        <div class="row justify-content-center" id="article_image_div">
             <div class="col-9" style="text-align: center">
                 <figure class="figure" id="article_image_fig">
                 </figure>
@@ -64,8 +65,8 @@
     }
 
     function displayArticle(categoryData, titleData, authorData, descData, imageURL) {
-        let titleSection = document.querySelector('#article_title_section');
-        let descSection = document.querySelector('#article_desc_section');
+        let titleSection = document.querySelector('#article_title_div');
+        let descSection = document.querySelector('#article_desc_div');
         let imageFigure = document.querySelector('#article_image_fig');
 
         let authToken = window.sessionStorage.getItem("authtoken");
@@ -99,17 +100,62 @@
 
             function onDeleteButtonHandler() {
                 const articleNo = getArticleNo();
+
+                const confirmDeletionDiv = document.querySelector('#confirm_deletion_div');
+                const confirmDeletionButtons =
+                `<button type="button" class="btn btn-danger btn-sm" id="confirm_button">삭제</button>
+                <button type="button" class="btn btn-primary btn-sm" id="cancel_button">취소</button>`;
+
+                confirmDeletionDiv.innerHTML = confirmDeletionButtons;
+
+                function onConfirmDeletionHandler() {
+                    let headerData = new Headers();
+                    let authToken = sessionStorage.getItem("authtoken");
+                    if(authToken){
+                        headerData.set("authtoken", authToken);
+                    }
+
+                    let formData = new FormData();
+
+                    formData.set("articleNo", articleNo);
+
+                    fetch('/api/article/delete', {
+                        method: 'POST',
+                        headers: headerData,
+                        body: formData
+                    }).then((response) => {
+                        return response.json();
+                    }).then((resBody) => {
+                        let url = '/home';
+                        window.location.replace(url);
+                    }).catch((error) => {
+                        console.log('[Error]delete_article.onConfirmDeletionHandler:', error);
+                    });
+                }
+
+                function onCancelHandler() {
+                    confirmDeletionDiv.innerHTML = '';
+                }
+
+                const confirmButton = document.querySelector('#confirm_button');
+                const cancelButton = document.querySelector('#cancel_button');
+
+                confirmButton.addEventListener('click', onConfirmDeletionHandler);
+                cancelButton.addEventListener('click', onCancelHandler);
             }
 
-            let buttons = `<button type="button" class="btn btn-primary btn-sm" id="edit_button">수정</button>
+            const buttons = `<button type="button" class="btn btn-primary btn-sm" id="edit_button">수정</button>
                 <button type="button" class="btn btn-secondary btn-sm" id="delete_button">삭제</button>`;
 
             editButtonsDiv.innerHTML = buttons;
 
             titleSection.appendChild(editButtonsDiv);
 
-            let editButton = document.querySelector('#edit_button');
+            const editButton = document.querySelector('#edit_button');
+            const deleteButton = document.querySelector('#delete_button');
+
             editButton.addEventListener('click', onClickEditBtnHandler);
+            deleteButton.addEventListener('click', onDeleteButtonHandler);
         }
 
         let descDiv = document.createElement('div');
@@ -127,7 +173,7 @@
     }
 
     function getArticle() {
-        articleNo = getArticleNo();
+        const articleNo = getArticleNo();
 
         let formData = new FormData();
         formData.append("articleNo", articleNo);

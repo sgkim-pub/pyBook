@@ -124,8 +124,8 @@
             }).then((response) => {
                 return response.json();
             }).then((resBody) => {
-                console.log('create_article.onSubmitHandler.success:', resBody["success"]);
-                console.log('create_article.onSubmitHandler.articleNo:', resBody["articleNo"]);
+                let url = '/home';
+                window.location.replace(url);
             }).catch((error) => {
                 console.log('[Error]create_article.onSubmitHandler:', error);
             });
