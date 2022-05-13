@@ -76,16 +76,23 @@
                 <hr>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-9">
-                <hr>
-            </div>
-            <div class="col-1">
-            </div>
-            <div class="col-6" id="display_reply_div">
-            </div>
-            <div class="col-2" id="delete_reply_button_div">
-                <button type="button" class="btn btn-primary" id="delete_reply_button">남기기</button>
+        <div class="row justify-content-center" id="display_reply_div">
+            <div class="row">
+                <div class="col-1">
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-2">
+                            reizel
+                        </div>
+                        <div class="col-7">
+                            제가 그 책 사고 싶습니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2" id="delete_reply_button_div">
+                    <button type="button" class="btn btn-primary" data-replyNo="1" id="delete_reply_button">삭제</button>
+                </div>
             </div>
         </div>
     </div>
@@ -95,7 +102,65 @@
 <script>
     const replyInput = document.querySelector('#reply_input');
     const leaveReplyButton = document.querySelector('#leave_reply_button');
+    const displayReplyDiv = document.querySelector('#display_reply_div');
 
-    function leaveReply(
+    function isDescriptionValid() {
+        return replyInput.value.length > 0
+    }
+
+    function onLeaveReplyHandler() {
+        const articleNo = getArticleNo();
+        let isDescriptionValid = isDescriptionValid();
+
+        if(isDescriptionValid === true){
+            let headerData = new Headers();
+            let authToken = sessionStorage.getItem("authtoken");
+            if(authToken){
+                headerData.set("authtoken", authToken);
+            }
+
+            let formData = new FormData();
+
+            formData.set("articleNo", articleNo);
+            formData.set("reply", replyInput.value);
+
+            fetch('/api/reply/create', {
+                method: 'POST',
+                headers: headerData,
+                body: formData
+            }).then((response) => {
+                return response.json();
+            }).then((resBody) => {
+                const author = resBody["author"];
+                const desc = resBody["description"];
+                const replyNo = resBody["replyNo"];
+
+                let replyContainer = document.createElement('div');
+                replyContainer.className = 'row';
+
+                let reply = `<div class="col-3">${author}</div>
+                    <div class="col-9">${desc}</div>`;
+
+                replyContainer.innerHTML = reply;
+
+                displayReplyDiv.appendChild(replyContainer);
+
+
+
+
+
+
+
+                
+
+
+
+            }).catch((error) => {
+                console.log('[Error]create_article.onSubmitHandler:', error);
+            });
+        }
+    }
+
+    leaveReplyButton.addEventListener('click', onLeaveReplyHandler);
 </script>
 </html>
