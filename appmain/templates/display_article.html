@@ -77,23 +77,23 @@
             </div>
         </div>
         <div class="row justify-content-center" id="display_reply_div">
-            <div class="row justify-content-center">
-                <div class="col-1">
-                </div>
-                <div class="col-6">
-                    <div class="row">
-                        <div class="col-2">
-                            reizel
-                        </div>
-                        <div class="col-7">
-                            제가 그 책 사고 싶습니다.
-                        </div>
-                    </div>
-                </div>
-                <div class="col-2" id="delete_reply_button_div">
-                    <button type="button" class="btn btn-secondary btn-sm" data-replyNo="1" id="delete_reply_button">삭제</button>
-                </div>
-            </div>
+<!--            <div class="row justify-content-center">-->
+<!--                <div class="col-1">-->
+<!--                </div>-->
+<!--                <div class="col-6">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-2">-->
+<!--                            reizel-->
+<!--                        </div>-->
+<!--                        <div class="col-7">-->
+<!--                            제가 그 책 사고 싶습니다.-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-2" id="delete_reply_button_div">-->
+<!--                    <button type="button" class="btn btn-secondary btn-sm" data-replyNo="1" id="delete_reply_button">삭제</button>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 </body>
@@ -104,15 +104,75 @@
     const leaveReplyButton = document.querySelector('#leave_reply_button');
     const displayReplyDiv = document.querySelector('#display_reply_div');
 
-    function isDescriptionValid() {
-        return replyInput.value.length > 0
+    let baseIndex = 0;
+    const numReplyRead = 3;
+
+    function displayReply() {
+        const articleNo = getArticleNo();
+
+        formData = new FormData();
+
+        formData.set("articleNo", articleNo);
+        formData.set("baseIndex", baseIndex);
+
+        fetch('/api/reply/get', {
+            method: 'POST',
+            body: formData
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            console.log('displayReply.resBody', resBody);
+            const replies = resBody["replies"];
+
+            replies.forEach((reply) => {
+                let replyRow = document.createElement('div');
+                replyRow.className = 'row justify-content-center mt-2';
+                replyRow.id = `id=reply_row-${reply["replyNo"]}`
+
+                replyContent = `
+                    <div class="row justify-content-center">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-2">
+                                    ${reply["author"]}
+                                </div>
+                                <div class="col-7">
+                                    ${reply["desc"]}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2" class="delete_reply_button_div">
+                            <button type="button" class="btn btn-secondary btn-sm" data-replyno="${reply["replyNo"]}">삭제</button>
+                        </div>
+                    </div>`;
+
+                replyRow.innerHTML = replyContent;
+
+                let deleteButton = replyRow.querySelector('button');
+                deleteButton.addEventListener('click', onDeleteReplyHandler);
+
+                displayReplyDiv.appendChild(replyRow);
+            });
+
+            baseIndex = baseIndex + numReplyRead;
+        }).catch((error) => {
+            console.log("[Error]getReply():", error);
+        });
+    }
+
+    window.addEventListener('load', displayReply);
+
+    function checkReplyInput() {
+        return replyInput.value.length > 0;
     }
 
     function onLeaveReplyHandler() {
         const articleNo = getArticleNo();
-        let isDescriptionValid = isDescriptionValid();
+        let isReplyInputValid = checkReplyInput();
 
-        if(isDescriptionValid === true){
+        if(isReplyInputValid === true){
             let headerData = new Headers();
             let authToken = sessionStorage.getItem("authtoken");
             if(authToken){
@@ -124,37 +184,38 @@
             formData.set("articleNo", articleNo);
             formData.set("reply", replyInput.value);
 
-            fetch('/api/reply/create', {
+            fetch('/api/reply/leave', {
                 method: 'POST',
                 headers: headerData,
                 body: formData
             }).then((response) => {
                 return response.json();
             }).then((resBody) => {
-                const author = resBody["author"];
-                const desc = resBody["description"];
-                const replyNo = resBody["replyNo"];
+                let replyRow = document.createElement('div');
+                replyRow.className = 'row justify-content-center mt-2';
+                replyRow.id = `id=reply_row-${resBody["replyNo"]}`
 
-                let replyContainer = document.createElement('div');
-                replyContainer.className = 'row';
+                replyContent = `
+                    <div class="row justify-content-center">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-2">
+                                    ${resBody["author"]}
+                                </div>
+                                <div class="col-7">
+                                    ${resBody["desc"]}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2" class="delete_reply_button_div">
+                            <button type="button" class="btn btn-secondary btn-sm" data-replyno="${resBody["replyNo"]}">삭제</button>
+                        </div>
+                    </div>`;
 
-                let reply = `<div class="col-3">${author}</div>
-                    <div class="col-9">${desc}</div>`;
-
-                replyContainer.innerHTML = reply;
-
-                displayReplyDiv.appendChild(replyContainer);
-
-
-
-
-
-
-
-
-
-
-
+                replyRow.innerHTML = replyContent;
+                displayReplyDiv.insertBefore(replyRow, displayReplyDiv.firstChild);
             }).catch((error) => {
                 console.log('[Error]create_article.onSubmitHandler:', error);
             });
@@ -162,5 +223,11 @@
     }
 
     leaveReplyButton.addEventListener('click', onLeaveReplyHandler);
+
+    function onDeleteReplyHandler(event) {
+        console.log('onDeleteReplyHandler.event.currentTarget.dataset.replyno:',
+        event.currentTarget.dataset.replyno);
+    }
+
 </script>
 </html>

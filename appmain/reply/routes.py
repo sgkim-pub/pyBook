@@ -8,7 +8,40 @@ from appmain.utils import verifyJWT, getJWTContent
 
 reply = Blueprint('reply', __name__)
 
-@reply.route('/api/reply/leave')
+@reply.route('/api/reply/get', methods=['POST'])
+def getReply():
+    data = request.form
+    articleNo = data["articleNo"]
+    baseIndex = data["baseIndex"]
+    numReplyRead = 3
+
+    payload = {"success": False}
+
+    try:
+        conn = sqlite3.connect('pyBook.db')
+        cursor = conn.cursor()
+
+        if cursor:
+            SQL = 'SELECT replyNo, author, description FROM replies WHERE targetArticle=? \
+            ORDER BY replyNo DESC LIMIT ?,?'
+            cursor.execute(SQL, (articleNo, baseIndex, numReplyRead))
+            result = cursor.fetchall()
+            cursor.close()
+        conn.close()
+
+        replies = []
+
+        for reply in result:
+            replies.append({"replyNo": reply[0], "author": reply[1], "desc": reply[2]})
+
+        payload = {"success": True, "replies": replies}
+    except Exception as err:
+        print('[Error]getReply():%s' % err)
+
+    return make_response(jsonify(payload), 200)
+
+
+@reply.route('/api/reply/leave', methods=['POST'])
 def leaveReply():
     headerData = request.headers
     data = request.form
@@ -33,6 +66,7 @@ def leaveReply():
             if cursor:
                 SQL = 'INSERT INTO replies (author, description, targetArticle) VALUES(?, ?, ?)'
                 cursor.execute(SQL, (username, reply, articleNo))
+                replyNo = cursor.lastrowid
                 conn.commit()
 
                 SQL = 'SELECT * FROM replies'
@@ -44,10 +78,12 @@ def leaveReply():
                 cursor.close()
             conn.close()
 
-            payload = {"success": True}
+            payload = {"success": True, "replyNo": replyNo, "author": username, "desc": reply}
         else:   # if isValid:
             pass
     else:   # if authToken:
         pass
 
     return make_response(jsonify(payload), 200)
+
+
