@@ -47,11 +47,17 @@
         <div class="row justify-content-center mt-3">
             <div class="col-8" id="recent_articles_div"></div>
         </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-8" id="search_result_div"></div>
+        </div>
     </div>
 </body>
 <script type="text/javascript" src="/static/js/navbar.js"></script>
 <script>
     let recentArticlesDiv = document.querySelector('#recent_articles_div');
+    const searchInput = document.querySelector('#search_input');
+    const searchButton = document.querySelector('#search_button');
+    const searchResultDiv = document.querySelector('#search_result_div');
 
     function displayRecentArticles(articles) {
         articles.forEach((article) => {
@@ -93,5 +99,82 @@
             console.log('[Error]getRecentArticles():', error);
         });
     }
+
+    function displaySearchResults(articles) {
+        articles.forEach((article) => {
+            let articleNo = article["articleNo"];
+            let title = article["title"];
+            let desc = article["desc"];
+
+            let cardDiv = document.createElement('div');
+            cardDiv.className = 'card mt-2';
+
+            let articleElement = `
+                <h5 class="card-header">
+                    <a class="link-primary text-decoration-none" href="/display_article/${articleNo}">
+                        ${title}
+                    </a>
+                </h5>
+                <p class="card-text text-truncate px-3 py-2">
+                    <a class="link-secondary text-decoration-none" href="/display_article/${articleNo}">
+                        ${desc}
+                    </a>
+                </p>
+            `;
+
+            cardDiv.innerHTML = articleElement;
+            searchResultDiv.appendChild(cardDiv);
+        });
+
+        let vacantDiv = document.createElement('div');
+        vacantDiv.className = 'card mt-5';
+        vacantDiv.style = 'border: None;';
+        searchResultDiv.appendChild(vacantDiv);
+    }
+
+    function searchArticle() {
+        let searchKeyword = searchInput.value;
+
+        if(searchKeyword.length > 0){
+
+            let formData = new FormData();
+
+            formData.set("searchKeyword", searchKeyword);
+
+            fetch('/api/article/search', {
+                method: 'POST',
+                body: formData
+            }).then((response) => {
+                return response.json();
+            }).then((resBody) => {
+                recentArticlesDiv.parentElement.remove();
+                const prevSR = searchResultDiv.querySelectorAll('.card');
+
+                if(prevSR.length > 0){
+                    prevSR.forEach((prevItem) => {
+                        prevItem.remove();
+                    });
+                }
+
+                if(resBody["success"] === true){
+                    displaySearchResults(resBody["articles"]);
+                }
+                else{
+                    let cardDiv = document.createElement('div');
+                    cardDiv.className = 'card mt-2 text-center';
+                    cardDiv.style = 'border: None;';
+
+                    const noSR = '<p>죄송합니다. 상품을 찾을 수 없습니다.</p>';
+
+                    cardDiv.innerHTML = noSR;
+                    searchResultDiv.appendChild(cardDiv);
+                }
+            }).catch((error) => {
+                console.log('[Error]searchArticle():', error);
+            });
+        }
+    }
+
+    searchButton.addEventListener('click', searchArticle);
 </script>
 </html>
