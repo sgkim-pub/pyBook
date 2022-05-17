@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="container mt-5">
-        <div class="row justify-content-center" id="article_title_section">
+        <div class="row justify-content-center" id="article_title_div">
         </div>
         <div class="row justify-content-center">
             <div class="col-9">
@@ -41,11 +41,11 @@
         </div>
     </div>
     <div class="container mt-3">
-        <div class="row justify-content-center" id="article_desc_section">
+        <div class="row justify-content-center" id="article_desc_div">
         </div>
     </div>
     <div class="container mt-3">
-        <div class="row justify-content-center" id="article_image_section">
+        <div class="row justify-content-center" id="article_image_div">
             <div class="col-9" style="text-align: center">
                 <figure class="figure" id="article_image_fig">
                 </figure>
@@ -64,8 +64,8 @@
     }
 
     function displayArticle(categoryData, titleData, authorData, descData, priceData, imageURL) {
-        const titleSection = document.querySelector('#article_title_section');
-        const descSection = document.querySelector('#article_desc_section');
+        const titleSection = document.querySelector('#article_title_div');
+        const descSection = document.querySelector('#article_desc_div');
         const imageFigure = document.querySelector('#article_image_fig');
 
         let titleDiv = document.createElement('div');
