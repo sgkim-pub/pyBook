@@ -61,10 +61,10 @@
 </body>
 <script type="text/javascript" src="/static/js/navbar.js"></script>
 <script>
-    let username = document.querySelector('#username_input');
-    let email = document.querySelector('#email_input');
-    let passwd = document.querySelector('#password_input');
-    let confirmPasswd = document.querySelector('#password_confirm');
+    const username = document.querySelector('#username_input');
+    const email = document.querySelector('#email_input');
+    const passwd = document.querySelector('#password_input');
+    const confirmPasswd = document.querySelector('#password_confirm');
 
     function checkPw() {
         return (passwd.value.length >= 5) && (passwd.value === confirmPasswd.value);
