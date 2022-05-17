@@ -30,11 +30,11 @@ def register():
         cursor.execute(SQL, (username, email, hashedPW))
         conn.commit()
 
-        SQL = 'SELECT * FROM users'
-        cursor.execute(SQL)
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row)
+        # SQL = 'SELECT * FROM users'
+        # cursor.execute(SQL)
+        # rows = cursor.fetchall()
+        # for row in rows:
+        #     print(row)
 
         cursor.close()
     conn.close()
@@ -85,7 +85,7 @@ def getAuth():
                            app.config["SECRET_KEY"], algorithm='HS256')
         payload = {"authenticated": True, "email": email, "username": username, "authtoken": token}
 
-        print('user.signin: %s' % email)
+        # print('user.signin: %s' % email)
     else:
         pass
 
