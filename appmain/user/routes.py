@@ -138,7 +138,7 @@ def updateMyInfo():
     username = data.get("username")
     passwd = data.get("passwd")
 
-    print('updateMyInfo.authToken:', authToken)
+    # print('updateMyInfo.authToken:', authToken)
 
     payload = {"success": False}
 
