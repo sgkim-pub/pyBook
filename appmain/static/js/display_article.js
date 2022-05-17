@@ -6,7 +6,7 @@ function getArticleNo() {
     return articleNo;
 }
 
-function displayArticle(categoryData, titleData, authorData, descData, imageURL) {
+function displayArticle(categoryData, titleData, authorData, descData, priceData, imageURL) {
     let titleSection = document.querySelector('#article_title_div');
     let descSection = document.querySelector('#article_desc_div');
     let imageFigure = document.querySelector('#article_image_fig');
@@ -18,7 +18,7 @@ function displayArticle(categoryData, titleData, authorData, descData, imageURL)
     let titleDiv = document.createElement('div');
     titleDiv.className = isEditable ? 'col-5' : 'col-7';
     titleDiv.id = 'article_title';
-    title = '[' + categoryData + '] ' + titleData
+    title = `[${categoryData}] ${titleData} - 가격 ${priceData}원`;
     titleDiv.appendChild(document.createTextNode(title));
     titleSection.appendChild(titleDiv);
 
@@ -129,7 +129,7 @@ function getArticle() {
         console.log('getArticle().resBody:', resBody);
         let article = resBody["article"];
         displayArticle(article["category"], article["title"], article["author"],
-        article["description"], article["picture"]);
+        article["description"], article["price"], article["picture"]);
     }).catch((error) => {
         console.log('[Error]getArticle():', error);
     });
