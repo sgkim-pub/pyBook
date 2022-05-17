@@ -63,15 +63,15 @@
         return articleNo;
     }
 
-    function displayArticle(categoryData, titleData, authorData, descData, imageURL) {
-        let titleSection = document.querySelector('#article_title_section');
-        let descSection = document.querySelector('#article_desc_section');
-        let imageFigure = document.querySelector('#article_image_fig');
+    function displayArticle(categoryData, titleData, authorData, descData, priceData, imageURL) {
+        const titleSection = document.querySelector('#article_title_section');
+        const descSection = document.querySelector('#article_desc_section');
+        const imageFigure = document.querySelector('#article_image_fig');
 
         let titleDiv = document.createElement('div');
         titleDiv.className = 'col-7';
         titleDiv.id = 'article_title';
-        title = '[' + categoryData + '] ' + titleData
+        title = `[${categoryData}] ${titleData} - 가격 ${priceData}원`;
         titleDiv.appendChild(document.createTextNode(title));
         titleSection.appendChild(titleDiv);
 
@@ -108,10 +108,10 @@
         }).then((response) => {
             return response.json();
         }).then((resBody) => {
-            console.log('getArticle().resBody:', resBody);
+            //console.log('getArticle().resBody:', resBody);
             let article = resBody["article"];
             displayArticle(article["category"], article["title"], article["author"],
-            article["description"], article["picture"]);
+            article["description"], article["price"], article["picture"]);
         }).catch((error) => {
             console.log('[Error]getArticle():', error);
         });
