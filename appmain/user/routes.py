@@ -91,8 +91,8 @@ def getAuth():
         cursor.close()
     conn.close()
 
-    response = make_response(jsonify(payload), 200)
-    return response
+    return make_response(jsonify(payload), 200)
+
 
 @user.route('/myinfo')
 def myPage():
@@ -125,8 +125,7 @@ def getMyInfo():
 
             payload = {"success": False, "username": username}
 
-    response = make_response(jsonify(payload), 200)
-    return response
+    return make_response(jsonify(payload), 200)
 
 
 @user.route('/api/user/update', methods=['POST'])
@@ -164,11 +163,11 @@ def updateMyInfo():
                     cursor.execute(SQL, (username, email))
                 conn.commit()
 
-                SQL = 'SELECT * FROM users'
-                cursor.execute(SQL)
-                rows = cursor.fetchall()
-                for row in rows:
-                    print(row)
+                # SQL = 'SELECT * FROM users'
+                # cursor.execute(SQL)
+                # rows = cursor.fetchall()
+                # for row in rows:
+                #     print(row)
 
                 cursor.close()
             conn.close()
@@ -176,5 +175,4 @@ def updateMyInfo():
     else:
         pass
 
-    response = make_response(jsonify(payload), 200)
-    return response
+    return make_response(jsonify(payload), 200)
