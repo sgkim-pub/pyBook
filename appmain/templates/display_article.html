@@ -65,8 +65,8 @@
     }
 
     function displayArticle(categoryData, titleData, authorData, descData, priceData, imageURL) {
-        const titleSection = document.querySelector('#article_title_section');
-        const descSection = document.querySelector('#article_desc_section');
+        const titleSection = document.querySelector('#article_title_div');
+        const descSection = document.querySelector('#article_desc_div');
         const imageFigure = document.querySelector('#article_image_fig');
 
         let authToken = window.sessionStorage.getItem("authtoken");
