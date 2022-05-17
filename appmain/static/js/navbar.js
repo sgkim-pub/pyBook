@@ -1,8 +1,8 @@
-let signup = document.querySelector("#signup_link");
-let signin = document.querySelector("#signin_link");
-let signout = document.querySelector("#signout_link");
-let myinfo = document.querySelector("#myinfo_link");
-let createArticleLink = document.querySelector("#create_article_link");
+const signup = document.querySelector("#signup_link");
+const signin = document.querySelector("#signin_link");
+const signout = document.querySelector("#signout_link");
+const myinfo = document.querySelector("#myinfo_link");
+const createArticleLink = document.querySelector("#create_article_link");
 
 function showAndHideNavbarMenu() {
     let authtoken = window.sessionStorage.getItem("authtoken");

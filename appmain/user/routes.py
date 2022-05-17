@@ -34,11 +34,11 @@ def register():
         cursor.execute(SQL, (username, email, hashedPW))
         conn.commit()
 
-        SQL = 'SELECT * FROM users'
-        cursor.execute(SQL)
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row)
+        # SQL = 'SELECT * FROM users'
+        # cursor.execute(SQL)
+        # rows = cursor.fetchall()
+        # for row in rows:
+        #     print(row)
 
         cursor.close()
     conn.close()
@@ -86,15 +86,15 @@ def getAuth():
                                app.config["SECRET_KEY"], algorithm='HS256')
             payload = {"authenticated": True, "email": email, "username": username, "authtoken": token}
 
-            print('user.signin: %s' % email)
+            # print('user.signin: %s' % email)
         else:
             pass
 
         cursor.close()
     conn.close()
 
-    response = make_response(jsonify(payload), 200)
-    return response
+    return make_response(jsonify(payload), 200)
+
 
 @user.route('/myinfo')
 def myPage():
@@ -127,8 +127,7 @@ def getMyInfo():
 
             payload = {"success": False, "username": username}
 
-    response = make_response(jsonify(payload), 200)
-    return response
+    return make_response(jsonify(payload), 200)
 
 
 @user.route('/api/user/update', methods=['POST'])
@@ -140,6 +139,8 @@ def updateMyInfo():
     authToken = headerData.get("authtoken")
     username = data.get("username")
     passwd = data.get("passwd")
+
+    # print('updateMyInfo.authToken:', authToken)
 
     payload = {"success": False}
 
@@ -164,17 +165,17 @@ def updateMyInfo():
                     cursor.execute(SQL, (username, email))
                 conn.commit()
 
-                SQL = 'SELECT * FROM users'
-                cursor.execute(SQL)
-                rows = cursor.fetchall()
-                for row in rows:
-                    print(row)
+                # SQL = 'SELECT * FROM users'
+                # cursor.execute(SQL)
+                # rows = cursor.fetchall()
+                # for row in rows:
+                #     print(row)
 
                 cursor.close()
             conn.close()
 
-    response = make_response(jsonify(payload), 200)
-    return response
+    return make_response(jsonify(payload), 200)
+
 
 @user.route('/resetpw')
 def resetpw():
@@ -211,12 +212,13 @@ def checkAndSendNewPW():
             msg = Message(subject='임시 비밀번호', sender='noreply@example.com', recipients=[email])
             msg.body = '임시 비밀번호입니다: ' + randPW
 
-            print('checkAndSendNewPW.msg:', msg)
+            # print('checkAndSendNewPW.msg:', msg)
             # mail.send(msg)
 
             payload = {"success": True}
         else:
             payload = {"success": False, "message": '등록되어 있지 않은 이메일입니다.'}
+    else:
+        pass
 
-    response = make_response(jsonify(payload), 200)
-    return response
+    return make_response(jsonify(payload), 200)

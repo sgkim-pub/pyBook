@@ -57,9 +57,9 @@
 </body>
 <script type="text/javascript" src="/static/js/navbar.js"></script>
 <script>
-    let username = document.querySelector('#username_input');
-    let passwd = document.querySelector('#password_input');
-    let confirmPasswd = document.querySelector('#password_confirm');
+    const username = document.querySelector('#username_input');
+    const passwd = document.querySelector('#password_input');
+    const confirmPasswd = document.querySelector('#password_confirm');
 
     function fillUserData() {
         let headerData = new Headers();
@@ -125,14 +125,14 @@
         }
     }
 
-    let submitButton = document.querySelector('#submit_button');
+    const submitButton = document.querySelector('#submit_button');
     submitButton.addEventListener('click', onSubmitHandler);
 
     function onCancelHandler() {
         history.back();
     }
 
-    let cancelButton = document.querySelector('#cancel_button');
+    const cancelButton = document.querySelector('#cancel_button');
     cancelButton.addEventListener('click', onCancelHandler);
 </script>
 </html>
