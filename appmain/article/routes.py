@@ -89,15 +89,15 @@ def getRecentArticles():
         SQL = 'SELECT articleNo, author, title, category, description, price, picture \
         FROM articles ORDER BY articleNo DESC LIMIT 2,6'
         cursor.execute(SQL)
-        recentArticleTuples = cursor.fetchall()
+        result = cursor.fetchall()
 
         cursor.close()
     conn.close()
 
     recentArticleDics = []
 
-    if len(recentArticleTuples) > 0:
-        for article in recentArticleTuples:
+    if len(result) > 0:
+        for article in result:
             recentArticleDics.append({"articleNo": article[0], "title": article[2], "desc": article[4]})
 
         payload = {"success": True, "articles": recentArticleDics}
