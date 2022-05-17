@@ -37,7 +37,6 @@ def register():
             print(row)
 
         cursor.close()
-
     conn.close()
 
     payload = {"success": True}
