@@ -87,7 +87,7 @@ def getRecentArticles():
 
     if cursor:
         SQL = 'SELECT articleNo, author, title, category, description, price, picture \
-        FROM articles ORDER BY articleNo DESC LIMIT 2,6'
+        FROM articles ORDER BY articleNo DESC LIMIT 6'
         cursor.execute(SQL)
         result = cursor.fetchall()
 

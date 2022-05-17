@@ -101,103 +101,6 @@
     let baseIndex = 0;
     const numReplyRead = 3;
 
-    function displayArticle(categoryData, titleData, authorData, descData, priceData, imageURL) {
-        const titleSection = document.querySelector('#article_title_div');
-        const descSection = document.querySelector('#article_desc_div');
-        const imageFigure = document.querySelector('#article_image_fig');
-
-        let authToken = window.sessionStorage.getItem("authtoken");
-        let userName = window.sessionStorage.getItem("username");
-        let isEditable = authToken && userName === authorData;
-
-        let titleDiv = document.createElement('div');
-        titleDiv.className = isEditable ? 'col-5' : 'col-7';
-        titleDiv.id = 'article_title';
-        title = `[${categoryData}] ${titleData} - 가격 ${priceData}원`;
-        titleDiv.appendChild(document.createTextNode(title));
-        titleSection.appendChild(titleDiv);
-
-        let authorDiv = document.createElement('div');
-        authorDiv.className = 'col-2';
-        authorDiv.style = 'text-align: center';
-        authorDiv.id = 'article_author';
-        authorDiv.appendChild(document.createTextNode(authorData));
-        titleSection.appendChild(authorDiv);
-
-        if(isEditable){
-            let editButtonsDiv = document.createElement('div');
-            editButtonsDiv.className = 'col-2 text-center';
-
-            function onClickEditBtnHandler() {
-                const articleNo = getArticleNo();
-
-                let editPage = '/update_article/' + articleNo;
-                window.location.replace(editPage);
-            }
-
-        const articleNo = getArticleNo();
-
-        let formData = new FormData();
-
-        formData.set("articleNo", articleNo);
-        formData.set("baseIndex", baseIndex);
-
-        fetch('/api/reply/get', {
-            method: 'POST',
-            body: formData
-        }).then((response) => {
-            return response.json();
-        }).then((resBody) => {
-            const replies = resBody["replies"];
-
-            replies.forEach((reply) => {
-                let replyRow = document.createElement('div');
-                replyRow.className = 'row justify-content-center mt-2';
-                replyRow.id = `reply_row-${reply["replyNo"]}`
-
-                replyContent = `
-                    <div class="row justify-content-center">
-                        <div class="col-1">
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-2">
-                                    ${reply["author"]}
-                                </div>
-                                <div class="col-7">
-                                    ${reply["desc"]}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2" class="delete_reply_button_div">
-                            <button type="button" class="btn btn-secondary btn-sm" data-replyno="${reply["replyNo"]}">삭제</button>
-                        </div>
-                    </div>`;
-
-                replyRow.innerHTML = replyContent;
-
-                let deleteButton = replyRow.querySelector('button');
-
-                if(!authToken){
-                    deleteButton.hidden = true;
-                }
-                else{
-                    deleteButton.addEventListener('click', onDeleteReplyHandler);
-                }
-
-                displayReplyDiv.appendChild(replyRow);
-            });
-
-            if(resBody["moreReplies"] === false){
-                moreRepliesButton.hidden = true;
-            }
-
-            baseIndex = baseIndex + numReplyRead;
-        }).catch((error) => {
-            console.log("[Error]getReply():", error);
-        });
-    }
-
     function displayReply() {
         const authToken = sessionStorage.getItem("authtoken");
         if(!authToken){
@@ -287,7 +190,6 @@
         }).then((response) => {
             return response.json();
         }).then((resBody) => {
-<<<<<<< HEAD
             if(resBody["success"] === true){
                 console.log('onDeleteReplyHandler():', replyNo);
 
@@ -295,12 +197,6 @@
                 const targetReplyRow = document.querySelector(targetReplyRowId);
                 targetReplyRow.remove();
             }
-=======
-            //console.log('getArticle().resBody:', resBody);
-            let article = resBody["article"];
-            displayArticle(article["category"], article["title"], article["author"],
-            article["description"], article["price"], article["picture"]);
->>>>>>> 04-04
         }).catch((error) => {
             console.log('[Error]onDeleteReplyHandler():', error);
         });
