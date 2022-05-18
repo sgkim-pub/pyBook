@@ -74,11 +74,11 @@ def leaveReply():
                 replyNo = cursor.lastrowid
                 conn.commit()
 
-                SQL = 'SELECT * FROM replies'
-                cursor.execute(SQL)
-                rows = cursor.fetchall()
-                for row in rows:
-                    print(row)
+                # SQL = 'SELECT * FROM replies'
+                # cursor.execute(SQL)
+                # rows = cursor.fetchall()
+                # for row in rows:
+                #     print(row)
 
                 cursor.close()
             conn.close()
@@ -113,8 +113,6 @@ def deleteReply():
                 SQL = 'DELETE FROM replies WHERE replyNo=?'
                 cursor.execute(SQL, (replyNo,))
                 conn.commit()
-
-                print('deleteReply():', replyNo)
 
             payload = {"success": True}
         else:   # if isValid:
