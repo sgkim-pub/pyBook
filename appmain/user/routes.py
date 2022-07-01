@@ -123,7 +123,7 @@ def getMyInfo():
                 cursor.close()
             conn.close()
 
-            payload = {"success": False, "username": username}
+            payload = {"success": True, "username": username}
 
     return make_response(jsonify(payload), 200)
 
