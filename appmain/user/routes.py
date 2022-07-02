@@ -1,7 +1,6 @@
 from flask import Blueprint, send_from_directory, make_response, jsonify, request
 import sqlite3
 import bcrypt
-import secrets
 import jwt
 import secrets
 from flask_mail import Message
