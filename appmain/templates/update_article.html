@@ -122,8 +122,8 @@
     function setArticleData(articleData) {
         const categorySet = {"인문": 0, "사회과학": 1, "자연과학": 2, "의학": 3, "경제/경영": 4, "공학": 5,
         "음악": 6, "미술": 7, "기타": 8};
-        const categoryString = articleData["category"];
-        const categoryValue = categorySet[categoryString];
+        const categoryCode = articleData["category"];
+        const categoryValue = categorySet[categoryCode];
         category.options[categoryValue].selected = true;
 
         title.value = articleData["title"];
