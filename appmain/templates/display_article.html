@@ -231,7 +231,12 @@
                     </div>`;
 
                 replyRow.innerHTML = replyContent;
+
+                let deleteButton = replyRow.querySelector('button');
+                deleteButton.addEventListener('click', onDeleteReplyHandler);
+
                 displayReplyDiv.insertBefore(replyRow, displayReplyDiv.firstChild);
+
                 replyInput.value = '';
                 baseIndex = baseIndex + 1;
             }).catch((error) => {
@@ -268,6 +273,7 @@
                 const targetReplyRowId = `#reply_row-${replyNo}`;
                 const targetReplyRow = document.querySelector(targetReplyRowId);
                 targetReplyRow.remove();
+                baseIndex = baseIndex - 1;
             }
         }).catch((error) => {
             console.log('[Error]onDeleteReplyHandler():', error);
