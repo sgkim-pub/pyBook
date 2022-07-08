@@ -153,7 +153,15 @@
                     deleteButton.hidden = true;
                 }
                 else{
-                    deleteButton.addEventListener('click', onDeleteReplyHandler);
+                    username = sessionStorage.getItem("username");
+                    author = reply["author"]
+
+                    if(username != author){
+                        deleteButton.hidden = true;
+                    }
+                    else{
+                        deleteButton.addEventListener('click', onDeleteReplyHandler);
+                    }
                 }
 
                 displayReplyDiv.appendChild(replyRow);
@@ -225,6 +233,7 @@
                 replyRow.innerHTML = replyContent;
                 displayReplyDiv.insertBefore(replyRow, displayReplyDiv.firstChild);
                 replyInput.value = '';
+                baseIndex = baseIndex + 1;
             }).catch((error) => {
                 console.log('[Error]create_article.onSubmitHandler:', error);
             });
