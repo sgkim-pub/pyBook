@@ -224,6 +224,7 @@
 
                 replyRow.innerHTML = replyContent;
                 displayReplyDiv.insertBefore(replyRow, displayReplyDiv.firstChild);
+                replyInput.value = '';
             }).catch((error) => {
                 console.log('[Error]create_article.onSubmitHandler:', error);
             });
