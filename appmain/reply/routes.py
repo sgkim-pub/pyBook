@@ -13,7 +13,7 @@ def getReply():
     data = request.form
     articleNo = data["articleNo"]
     baseIndex = data["baseIndex"]
-    numReplyRead = 3
+    numReplyRead = data["numReplyRead"]
 
     payload = {"success": False}
 

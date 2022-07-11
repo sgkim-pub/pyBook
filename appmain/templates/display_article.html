@@ -112,6 +112,7 @@
 
         formData.set("articleNo", articleNo);
         formData.set("baseIndex", baseIndex);
+        formData.set("numReplyRead", numReplyRead);
 
         fetch('/api/reply/get', {
             method: 'POST',
