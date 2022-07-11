@@ -13,7 +13,7 @@ def getReply():
     data = request.form
     articleNo = data["articleNo"]
     baseIndex = data["baseIndex"]
-    numReplyRead = 3
+    numReplyRead = data["numReplyRead"]
 
     payload = {"success": False}
 
@@ -26,6 +26,11 @@ def getReply():
             ORDER BY replyNo DESC LIMIT ?,?'
             cursor.execute(SQL, (articleNo, baseIndex, numReplyRead))
             result = cursor.fetchall()
+
+            SQL = 'SELECT COUNT(*) FROM replies WHERE targetArticle=?'
+            cursor.execute(SQL, (articleNo,))
+            numTotalReply = cursor.fetchone()[0]
+
             cursor.close()
         conn.close()
 
@@ -34,7 +39,7 @@ def getReply():
         for reply in result:
             replies.append({"replyNo": reply[0], "author": reply[1], "desc": reply[2]})
 
-        if len(replies) < numReplyRead:
+        if numTotalReply <= (int(baseIndex) + int(numReplyRead)):
             moreReplies = False
         else:
             moreReplies = True

@@ -45,9 +45,9 @@
         <div class="row justify-content-center" id="article_desc_div">
         </div>
     </div>
-    <div class="container mt-3">
+    <div class="container mt-5">
         <div class="row justify-content-center" id="article_image_div">
-            <div class="col-9" style="text-align: center">
+            <div class="col-3" style="text-align: center">
                 <figure class="figure" id="article_image_fig">
                 </figure>
             </div>
@@ -112,6 +112,7 @@
 
         formData.set("articleNo", articleNo);
         formData.set("baseIndex", baseIndex);
+        formData.set("numReplyRead", numReplyRead);
 
         fetch('/api/reply/get', {
             method: 'POST',
@@ -127,22 +128,20 @@
                 replyRow.id = `reply_row-${reply["replyNo"]}`
 
                 replyContent = `
-                    <div class="row justify-content-center">
-                        <div class="col-1">
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-2">
-                                    ${reply["author"]}
-                                </div>
-                                <div class="col-7">
-                                    ${reply["desc"]}
-                                </div>
+                    <div class="col-1">
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-2">
+                                ${reply["author"]}
+                            </div>
+                            <div class="col-7">
+                                ${reply["desc"]}
                             </div>
                         </div>
-                        <div class="col-2" class="delete_reply_button_div">
-                            <button type="button" class="btn btn-secondary btn-sm" data-replyno="${reply["replyNo"]}">삭제</button>
-                        </div>
+                    </div>
+                    <div class="col-2" class="delete_reply_button_div">
+                        <button type="button" class="btn btn-secondary btn-sm" data-replyno="${reply["replyNo"]}">삭제</button>
                     </div>`;
 
                 replyRow.innerHTML = replyContent;
@@ -153,7 +152,15 @@
                     deleteButton.hidden = true;
                 }
                 else{
-                    deleteButton.addEventListener('click', onDeleteReplyHandler);
+                    username = sessionStorage.getItem("username");
+                    author = reply["author"]
+
+                    if(username != author){
+                        deleteButton.hidden = true;
+                    }
+                    else{
+                        deleteButton.addEventListener('click', onDeleteReplyHandler);
+                    }
                 }
 
                 displayReplyDiv.appendChild(replyRow);
@@ -204,26 +211,31 @@
                 replyRow.id = `reply_row-${resBody["replyNo"]}`
 
                 replyContent = `
-                    <div class="row justify-content-center">
-                        <div class="col-1">
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-2">
-                                    ${resBody["author"]}
-                                </div>
-                                <div class="col-7">
-                                    ${resBody["desc"]}
-                                </div>
+                    <div class="col-1">
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-2">
+                                ${resBody["author"]}
+                            </div>
+                            <div class="col-7">
+                                ${resBody["desc"]}
                             </div>
                         </div>
-                        <div class="col-2" class="delete_reply_button_div">
-                            <button type="button" class="btn btn-secondary btn-sm" data-replyno="${resBody["replyNo"]}">삭제</button>
-                        </div>
+                    </div>
+                    <div class="col-2" class="delete_reply_button_div">
+                        <button type="button" class="btn btn-secondary btn-sm" data-replyno="${resBody["replyNo"]}">삭제</button>
                     </div>`;
 
                 replyRow.innerHTML = replyContent;
+
+                let deleteButton = replyRow.querySelector('button');
+                deleteButton.addEventListener('click', onDeleteReplyHandler);
+
                 displayReplyDiv.insertBefore(replyRow, displayReplyDiv.firstChild);
+
+                replyInput.value = '';
+                baseIndex = baseIndex + 1;
             }).catch((error) => {
                 console.log('[Error]create_article.onSubmitHandler:', error);
             });
@@ -258,6 +270,7 @@
                 const targetReplyRowId = `#reply_row-${replyNo}`;
                 const targetReplyRow = document.querySelector(targetReplyRowId);
                 targetReplyRow.remove();
+                baseIndex = baseIndex - 1;
             }
         }).catch((error) => {
             console.log('[Error]onDeleteReplyHandler():', error);
