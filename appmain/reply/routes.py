@@ -30,7 +30,6 @@ def getReply():
             SQL = 'SELECT COUNT(*) FROM replies WHERE targetArticle=?'
             cursor.execute(SQL, (articleNo,))
             numTotalReply = cursor.fetchone()[0]
-            print('numTotalReply=%s' % numTotalReply)
 
             cursor.close()
         conn.close()
