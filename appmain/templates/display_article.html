@@ -127,22 +127,20 @@
                 replyRow.id = `reply_row-${reply["replyNo"]}`
 
                 replyContent = `
-                    <div class="row justify-content-center">
-                        <div class="col-1">
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-2">
-                                    ${reply["author"]}
-                                </div>
-                                <div class="col-7">
-                                    ${reply["desc"]}
-                                </div>
+                    <div class="col-1">
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-2">
+                                ${reply["author"]}
+                            </div>
+                            <div class="col-7">
+                                ${reply["desc"]}
                             </div>
                         </div>
-                        <div class="col-2" class="delete_reply_button_div">
-                            <button type="button" class="btn btn-secondary btn-sm" data-replyno="${reply["replyNo"]}">삭제</button>
-                        </div>
+                    </div>
+                    <div class="col-2" class="delete_reply_button_div">
+                        <button type="button" class="btn btn-secondary btn-sm" data-replyno="${reply["replyNo"]}">삭제</button>
                     </div>`;
 
                 replyRow.innerHTML = replyContent;
@@ -212,22 +210,20 @@
                 replyRow.id = `reply_row-${resBody["replyNo"]}`
 
                 replyContent = `
-                    <div class="row justify-content-center">
-                        <div class="col-1">
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-2">
-                                    ${resBody["author"]}
-                                </div>
-                                <div class="col-7">
-                                    ${resBody["desc"]}
-                                </div>
+                    <div class="col-1">
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-2">
+                                ${resBody["author"]}
+                            </div>
+                            <div class="col-7">
+                                ${resBody["desc"]}
                             </div>
                         </div>
-                        <div class="col-2" class="delete_reply_button_div">
-                            <button type="button" class="btn btn-secondary btn-sm" data-replyno="${resBody["replyNo"]}">삭제</button>
-                        </div>
+                    </div>
+                    <div class="col-2" class="delete_reply_button_div">
+                        <button type="button" class="btn btn-secondary btn-sm" data-replyno="${resBody["replyNo"]}">삭제</button>
                     </div>`;
 
                 replyRow.innerHTML = replyContent;
