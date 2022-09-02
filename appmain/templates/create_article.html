@@ -126,6 +126,7 @@
             }).then((resBody) => {
                 console.log('create_article.onSubmitHandler.success:', resBody["success"]);
                 console.log('create_article.onSubmitHandler.articleNo:', resBody["articleNo"]);
+                window.location.replace('/home');
             }).catch((error) => {
                 console.log('[Error]create_article.onSubmitHandler:', error);
             });
