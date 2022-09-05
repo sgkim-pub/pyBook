@@ -91,6 +91,13 @@
             let editButtonsDiv = document.createElement('div');
             editButtonsDiv.className = 'col-2 text-center';
 
+            const buttons = `<button type="button" class="btn btn-primary btn-sm" id="edit_button">수정</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="delete_button">삭제</button>`;
+
+            editButtonsDiv.innerHTML = buttons;
+
+            titleSection.appendChild(editButtonsDiv);
+
             function onClickEditBtnHandler() {
                 const articleNo = getArticleNo();
 
@@ -143,13 +150,6 @@
                 confirmButton.addEventListener('click', onConfirmDeletionHandler);
                 cancelButton.addEventListener('click', onCancelHandler);
             }
-
-            const buttons = `<button type="button" class="btn btn-primary btn-sm" id="edit_button">수정</button>
-                <button type="button" class="btn btn-secondary btn-sm" id="delete_button">삭제</button>`;
-
-            editButtonsDiv.innerHTML = buttons;
-
-            titleSection.appendChild(editButtonsDiv);
 
             const editButton = document.querySelector('#edit_button');
             const deleteButton = document.querySelector('#delete_button');
