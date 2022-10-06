@@ -288,7 +288,7 @@ def deleteArticle():
             cursor = conn.cursor()
 
             if cursor:
-                SQL = 'SELECT author FROM articles WHERE articleNo=?'
+                SQL = 'SELECT author, picture FROM articles WHERE articleNo=?'
                 cursor.execute(SQL, (articleNo,))
                 result = cursor.fetchone()
                 cursor.close()
@@ -297,6 +297,18 @@ def deleteArticle():
             if(result[0] == username):
                 conn = sqlite3.connect('pyBook.db')
                 cursor = conn.cursor()
+
+                picture = result[1]
+
+                if(picture):
+                    picFilePath = os.path.join(app.static_folder, 'pics', username, picture)
+
+                    if os.path.isfile(picFilePath):
+                        os.remove(picFilePath)
+                    else:
+                        pass
+                else:
+                    pass
 
                 if cursor:
                     SQL = 'DELETE FROM articles WHERE articleNo=?'
