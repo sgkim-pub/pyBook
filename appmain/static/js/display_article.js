@@ -7,9 +7,9 @@ function getArticleNo() {
 }
 
 function displayArticle(categoryData, titleData, authorData, descData, priceData, imageURL) {
-    let titleSection = document.querySelector('#article_title_div');
-    let descSection = document.querySelector('#article_desc_div');
-    let imageFigure = document.querySelector('#article_image_fig');
+    const titleSection = document.querySelector('#article_title_div');
+    const descSection = document.querySelector('#article_desc_div');
+    const imageFigure = document.querySelector('#article_image_fig');
 
     let authToken = window.sessionStorage.getItem("authtoken");
     let userName = window.sessionStorage.getItem("username");
@@ -32,6 +32,13 @@ function displayArticle(categoryData, titleData, authorData, descData, priceData
     if(isEditable){
         let editButtonsDiv = document.createElement('div');
         editButtonsDiv.className = 'col-2 text-center';
+
+        const buttons = `<button type="button" class="btn btn-primary btn-sm" id="edit_button">수정</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="delete_button">삭제</button>`;
+
+        editButtonsDiv.innerHTML = buttons;
+
+        titleSection.appendChild(editButtonsDiv);
 
         function onClickEditBtnHandler() {
             const articleNo = getArticleNo();
@@ -86,13 +93,6 @@ function displayArticle(categoryData, titleData, authorData, descData, priceData
             cancelButton.addEventListener('click', onCancelHandler);
         }
 
-        const buttons = `<button type="button" class="btn btn-primary btn-sm" id="edit_button">수정</button>
-            <button type="button" class="btn btn-secondary btn-sm" id="delete_button">삭제</button>`;
-
-        editButtonsDiv.innerHTML = buttons;
-
-        titleSection.appendChild(editButtonsDiv);
-
         const editButton = document.querySelector('#edit_button');
         const deleteButton = document.querySelector('#delete_button');
 
@@ -126,7 +126,7 @@ function getArticle() {
     }).then((response) => {
         return response.json();
     }).then((resBody) => {
-        console.log('getArticle().resBody:', resBody);
+        //console.log('getArticle().resBody:', resBody);
         let article = resBody["article"];
         displayArticle(article["category"], article["title"], article["author"],
         article["description"], article["price"], article["picture"]);
