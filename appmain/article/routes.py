@@ -342,7 +342,6 @@ def searchArticles():
     if cursor:
         SQL = 'SELECT articleNo, author, title, category, description, price, picture \
         FROM articles WHERE title LIKE "%{skwd}%" ORDER BY articleNo DESC'.format(skwd=searchKeyword)
-        # cursor.execute(SQL, (searchKeyword,))
         cursor.execute(SQL)
         result = cursor.fetchall()
 
