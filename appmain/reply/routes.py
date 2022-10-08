@@ -8,6 +8,7 @@ from appmain.utils import verifyJWT, getJWTContent
 
 reply = Blueprint('reply', __name__)
 
+
 @reply.route('/api/reply/leave', methods=['POST'])
 def leaveReply():
     headerData = request.headers
@@ -52,6 +53,7 @@ def leaveReply():
         pass
 
     return make_response(jsonify(payload), 200)
+
 
 @reply.route('/api/reply/get', methods=['POST'])
 def getReply():
