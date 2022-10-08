@@ -8,49 +8,6 @@ from appmain.utils import verifyJWT, getJWTContent
 
 reply = Blueprint('reply', __name__)
 
-@reply.route('/api/reply/get', methods=['POST'])
-def getReply():
-    data = request.form
-    articleNo = data["articleNo"]
-    baseIndex = data["baseIndex"]
-    numReplyRead = data["numReplyRead"]
-
-    payload = {"success": False}
-
-    try:
-        conn = sqlite3.connect('pyBook.db')
-        cursor = conn.cursor()
-
-        if cursor:
-            SQL = 'SELECT replyNo, author, description FROM replies WHERE targetArticle=? \
-            ORDER BY replyNo DESC LIMIT ?,?'
-            cursor.execute(SQL, (articleNo, baseIndex, numReplyRead))
-            result = cursor.fetchall()
-
-            SQL = 'SELECT COUNT(*) FROM replies WHERE targetArticle=?'
-            cursor.execute(SQL, (articleNo,))
-            numTotalReply = cursor.fetchone()[0]
-
-            cursor.close()
-        conn.close()
-
-        replies = []
-
-        for reply in result:
-            replies.append({"replyNo": reply[0], "author": reply[1], "desc": reply[2]})
-
-        if numTotalReply <= (int(baseIndex) + int(numReplyRead)):
-            moreReplies = False
-        else:
-            moreReplies = True
-
-        payload = {"success": True, "replies": replies, "moreReplies": moreReplies}
-    except Exception as err:
-        print('[Error]getReply():%s' % err)
-
-    return make_response(jsonify(payload), 200)
-
-
 @reply.route('/api/reply/leave', methods=['POST'])
 def leaveReply():
     headerData = request.headers
@@ -95,6 +52,49 @@ def leaveReply():
         pass
 
     return make_response(jsonify(payload), 200)
+
+@reply.route('/api/reply/get', methods=['POST'])
+def getReply():
+    data = request.form
+    articleNo = data["articleNo"]
+    baseIndex = data["baseIndex"]
+    numReplyRead = data["numReplyRead"]
+
+    payload = {"success": False}
+
+    try:
+        conn = sqlite3.connect('pyBook.db')
+        cursor = conn.cursor()
+
+        if cursor:
+            SQL = 'SELECT replyNo, author, description FROM replies WHERE targetArticle=? \
+            ORDER BY replyNo DESC LIMIT ?,?'
+            cursor.execute(SQL, (articleNo, baseIndex, numReplyRead))
+            result = cursor.fetchall()
+
+            SQL = 'SELECT COUNT(*) FROM replies WHERE targetArticle=?'
+            cursor.execute(SQL, (articleNo,))
+            numTotalReply = cursor.fetchone()[0]
+
+            cursor.close()
+        conn.close()
+
+        replies = []
+
+        for reply in result:
+            replies.append({"replyNo": reply[0], "author": reply[1], "desc": reply[2]})
+
+        if numTotalReply <= (int(baseIndex) + int(numReplyRead)):
+            moreReplies = False
+        else:
+            moreReplies = True
+
+        payload = {"success": True, "replies": replies, "moreReplies": moreReplies}
+    except Exception as err:
+        print('[Error]getReply():%s' % err)
+
+    return make_response(jsonify(payload), 200)
+
 
 @reply.route('/api/reply/delete', methods=['POST'])
 def deleteReply():
