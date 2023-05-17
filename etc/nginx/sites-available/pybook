@@ -1,0 +1,15 @@
+server {
+	listen 80;
+	server_name 'IP address of your server';
+
+	location /static {
+		alias /home/ubuntu/pybook/appmain/static;
+	}
+
+	location / {
+		proxy_pass http://localhost:8086;
+		include /etc/nginx/proxy_params;
+		proxy_redirect off;
+	}
+}
+
