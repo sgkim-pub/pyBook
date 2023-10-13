@@ -44,7 +44,6 @@ def register():
 
 @user.route('/signin')
 def signIn():
-
     return send_from_directory(app.root_path, 'templates/signin.html')
 
 @user.route('/api/user/signin', methods=['POST'])
@@ -71,23 +70,22 @@ def getAuth():
         else:
             pwMatch = None
 
-    if pwMatch:
-        authkey = secrets.token_hex(16)
+        if pwMatch:
+            authkey = secrets.token_hex(16)
 
-        SQL = 'UPDATE users SET authkey=? WHERE id=?'
-        cursor.execute(SQL, (authkey, id))
-        conn.commit()
+            SQL = 'UPDATE users SET authkey=? WHERE id=?'
+            cursor.execute(SQL, (authkey, id))
+            conn.commit()
+
+            token = jwt.encode({"id": id, "email": email, "username": username, "authkey": authkey},
+                               app.config["SECRET_KEY"], algorithm='HS256')
+            payload = {"authenticated": True, "email": email, "username": username, "authtoken": token}
+
+            # print('user.signin: %s' % email)
+        else:
+            pass
 
         cursor.close()
-        conn.close()
+    conn.close()
 
-        token = jwt.encode({"id": id, "email": email, "username": username, "authkey": authkey},
-                           app.config["SECRET_KEY"], algorithm='HS256')
-        payload = {"authenticated": True, "email": email, "username": username, "authtoken": token}
-
-        # print('user.signin: %s' % email)
-    else:
-        pass
-
-    response = make_response(jsonify(payload), 200)
-    return response
+    return make_response(jsonify(payload), 200)
