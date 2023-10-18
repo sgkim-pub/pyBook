@@ -10,9 +10,9 @@
 
 책의 2장에 해당하는 예제 소스 코드들을 아래 위치에서 찾아보실 수 있습니다.
 
-[웹 프로그램 기본 구조와 작동 원리](https://github.com/sgkim-pub/pyWorld)
+[2장 전반부 - 웹 프로그램 기본 구조와 작동 원리](https://github.com/sgkim-pub/pyWorld)
 
-[HTML, JavaScript](https://github.com/sgkim-pub/html_js)
+[2장 후반부 - HTML, JavaScript](https://github.com/sgkim-pub/html_js)
 
 책에서 백엔드 코드 작성에 사용했던 파이썬과 파이참(PyCharm)을 아래 경로에서 찾으실 수 있습니다. 파이참은 순수 파이썬 개발용 Community Edition을 다운로드하고 이용하시면 됩니다.
 
