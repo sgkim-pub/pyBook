@@ -16,6 +16,14 @@
 
 책에서 백엔드 코드 작성에 사용했던 파이썬과 파이참(PyCharm)을 아래 경로에서 찾으실 수 있습니다. 파이참은 순수 파이썬 개발용 Community Edition을 다운로드하고 이용하시면 됩니다.
 
-[파이썬](https://www.python.org/)
+파이썬: <https://www.python.org/>
 
-[파이참](https://www.jetbrains.com/ko-kr/pycharm/download/?section=windows)
+파이참: <https://www.jetbrains.com/ko-kr/pycharm/download/?section=windows>
+
+---
+
+모든 작가가 책에 가능하면 많은 내용을 담아서 드리고 싶을 것입니다. 하지만 웹 프로그램의 작동 원리와 이를 확인하는 실습 코드를 중심으로 핵심적이라고 생각되는 내용들을 중심으로 책을 구성하였습니다.
+
+시간이 흐르면서 최신 기술이 책의 일부 내용과 다르거나 책의 일부 예제들이 매끄럽게 동작하지 않을 수 있을 것입니다. 내용을 알려주시면 책의 판본을 변경할 기회가 될 때 반영해 보겠습니다.
+
+저자 이메일: <wonears@gmail.com>
